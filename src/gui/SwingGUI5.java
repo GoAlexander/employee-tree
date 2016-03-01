@@ -1,4 +1,4 @@
-package tree;
+package gui;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -23,7 +23,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
+public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
 	private SwingGUI5Model theAppModel;
 
 	private JTree theTree;

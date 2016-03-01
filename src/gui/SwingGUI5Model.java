@@ -1,4 +1,4 @@
-package tree;
+package gui;
 
 import java.util.Enumeration;
 
@@ -8,7 +8,12 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-class SwingGUI5Model {
+import tree.DictionaryAnchor;
+import tree.DictionaryElem;
+import tree.DictionaryEntry;
+import tree.DictionaryTopic;
+
+public class SwingGUI5Model {
 
 	private DefaultTreeModel theModel;
 	private static String alphabet = new String("ABCDEFGIJKLMNOPRSTUVWXYZ");
