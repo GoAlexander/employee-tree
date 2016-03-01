@@ -22,12 +22,18 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import java.awt.CardLayout;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.BoxLayout;
+import javax.swing.JSeparator;
 
 public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
 	private SwingGUI5Model theAppModel;
 
 	private JTree theTree;
-	private JTextArea theTextArea;
 	private JButton insertButton;
 	private JButton deleteButton;
 	private JButton findButton;
@@ -40,6 +46,20 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private UIManager.LookAndFeelInfo installedLF[];
 
 	private int current;
+	private JLabel lblEditorModeexample;
+	private JPanel panel_1;
+	private JLabel lblSurname;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JLabel lblNewLabel_1;
+	private JTextField textField_2;
+	private JLabel lblNewLabel_2;
+	private JTextField textField_3;
+	private JLabel lblNewLabel_3;
+	private JButton button;
+	private JTextField textField_4;
+	private JSeparator separator;
+	private JButton btnSave;
 
 	protected Component buildGUI() {
 
@@ -51,12 +71,67 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		theTree.addTreeSelectionListener(this);
 		int mode = TreeSelectionModel.SINGLE_TREE_SELECTION;
 		theTree.getSelectionModel().setSelectionMode(mode);
-
-		theTextArea = new JTextArea();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 2));
 		panel.add(new JScrollPane(theTree));
-		panel.add(new JScrollPane(theTextArea));
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setEnabled(false);
+		panel.add(scrollPane);
+		
+		lblEditorModeexample = new JLabel("Editor mode (example)");
+		scrollPane.setColumnHeaderView(lblEditorModeexample);
+		
+		panel_1 = new JPanel();
+		scrollPane.setViewportView(panel_1);
+		panel_1.setLayout(new GridLayout(6, 2));
+		
+		lblSurname = new JLabel("Surname:");
+		panel_1.add(lblSurname);
+		
+		textField = new JTextField();
+		lblSurname.setLabelFor(textField);
+		panel_1.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Name:");
+		panel_1.add(lblNewLabel);
+		
+		textField_1 = new JTextField();
+		panel_1.add(textField_1);
+		textField_1.setColumns(10);
+		
+		lblNewLabel_1 = new JLabel("Patronymic");
+		panel_1.add(lblNewLabel_1);
+		
+		textField_2 = new JTextField();
+		panel_1.add(textField_2);
+		textField_2.setColumns(10);
+		
+		lblNewLabel_2 = new JLabel("DoB");
+		panel_1.add(lblNewLabel_2);
+		
+		textField_3 = new JTextField();
+		panel_1.add(textField_3);
+		textField_3.setColumns(10);
+				
+		lblNewLabel_3 = new JLabel("Number");
+		panel_1.add(lblNewLabel_3);
+		
+		textField_4 = new JTextField();
+		panel_1.add(textField_4);
+		textField_4.setColumns(10);
+		
+		separator = new JSeparator();
+		panel_1.add(separator);
+		
+		btnSave = new JButton("Save");
+		panel_1.add(btnSave);
+		
+		
+		
+		//---
 
 		contentPane.add(panel, "Center");
 
@@ -101,7 +176,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		theAppModel = appModel;
 
 		setTitle("Tree  example with model");
-		setSize(800, 200);
+		setSize(800, 350);
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -181,9 +256,11 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 
+		/*
 		if (selectedNode != null) {
 			theTextArea.setText(selectedNode.toString());
 		}
+		*/
 
 	}
 }
