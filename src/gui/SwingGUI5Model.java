@@ -23,14 +23,14 @@ public class SwingGUI5Model {
 
 	}
 
-	public TreePath findPerson(String data) {
+	public TreePath findPerson(String[] dataarr) {
 		TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
-
+		
 		anchor.topic = null;
 		anchor.entry = null;
 
-		DictionaryEntry new_entry = new DictionaryEntry(data);
+		DictionaryEntry new_entry = new DictionaryEntry(dataarr);
 
 		if (this.findEntry(new_entry, anchor)) {
 			TreeNode[] nodes = theModel.getPathToRoot(anchor.entry);
@@ -53,14 +53,14 @@ public class SwingGUI5Model {
 		}
 	}
 
-	public TreePath insertPerson(String data) {
+	public TreePath insertPerson(String[] dataarr) {
 		TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
-
+	
 		anchor.topic = null;
 		anchor.entry = null;
 
-		DictionaryEntry new_entry = new DictionaryEntry(data);
+		DictionaryEntry new_entry = new DictionaryEntry(dataarr);
 
 		if (this.findEntry(new_entry, anchor)) {
 			// found such a person
@@ -85,6 +85,7 @@ public class SwingGUI5Model {
 
 	protected boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
+		//String[] info = new_entry.getInfo();
 		String firstLetter = new_entry.getValue().substring(0, 1);
 		boolean result = false;
 
@@ -115,9 +116,9 @@ public class SwingGUI5Model {
 			while (en.hasMoreElements()) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) en.nextElement();
 
-				DictionaryElem elem = (DictionaryElem) node.getUserObject();
+				DictionaryEntry elem = (DictionaryEntry) node.getUserObject();
 				if ("Entry".equals(elem.getType())) {
-					if (new_entry.getValue().equalsIgnoreCase(elem.getValue())) {
+					if (new_entry.getInfo().equalsIgnoreCase(elem.getInfo())) {
 						anchor.entry = node;
 						result = true;
 						break;
@@ -156,4 +157,3 @@ public class SwingGUI5Model {
 	}
 
 }
-

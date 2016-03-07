@@ -22,6 +22,10 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+
+import tree.DictionaryElem;
+import tree.DictionaryEntry;
+
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
@@ -79,59 +83,57 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setEnabled(false);
 		panel.add(scrollPane);
-		
+
 		lblEditorModeexample = new JLabel("Editor mode (example)");
 		scrollPane.setColumnHeaderView(lblEditorModeexample);
-		
+
 		panel_1 = new JPanel();
 		scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new GridLayout(6, 2));
-		
+
 		lblSurname = new JLabel("Surname:");
 		panel_1.add(lblSurname);
-		
+
 		textField = new JTextField();
 		lblSurname.setLabelFor(textField);
 		panel_1.add(textField);
 		textField.setColumns(10);
-		
+
 		JLabel lblNewLabel = new JLabel("Name:");
 		panel_1.add(lblNewLabel);
-		
+
 		textField_1 = new JTextField();
 		panel_1.add(textField_1);
 		textField_1.setColumns(10);
-		
-		lblNewLabel_1 = new JLabel("Patronymic");
+
+		lblNewLabel_1 = new JLabel("Middle Name");
 		panel_1.add(lblNewLabel_1);
-		
+
 		textField_2 = new JTextField();
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
-		
+
 		lblNewLabel_2 = new JLabel("DoB");
 		panel_1.add(lblNewLabel_2);
-		
+
 		textField_3 = new JTextField();
 		panel_1.add(textField_3);
 		textField_3.setColumns(10);
-				
-		lblNewLabel_3 = new JLabel("Number");
+
+		lblNewLabel_3 = new JLabel("Address");
 		panel_1.add(lblNewLabel_3);
-		
+
 		textField_4 = new JTextField();
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
-		
+
 		separator = new JSeparator();
 		panel_1.add(separator);
-		
+
 		btnSave = new JButton("Save");
 		panel_1.add(btnSave);
-		
-		
-		
-		//---
+
+		// ---
 
 		contentPane.add(panel, "Center");
 
@@ -198,15 +200,19 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	public void actionPerformed(ActionEvent event) {
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theTree.getLastSelectedPathComponent();
 
-		String textVal = theTextField.getText();
+		String[] textVal = new String[5];
+		textVal[0] = textField.getText();
+		textVal[1] = textField_1.getText();
+		textVal[2] = textField_2.getText();
+		textVal[3] = textField_3.getText();
+		textVal[4] = textField_4.getText();
 
-		if (textVal == null) {
-			textVal = "new person";
-		} else if (textVal.equals("")) {
-			textVal = "new";
-		}
+		if (textVal.equals(""))
+			textVal[0] = "new";
 
-		if (event.getSource().equals(changeLookFeelButton)) {
+		if (event.getSource().equals(changeLookFeelButton))
+
+		{
 			current++;
 			if (current > installedLF.length - 1) {
 				current = 0;
@@ -221,7 +227,9 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			} catch (Exception ex) {
 				System.out.println("exception");
 			}
-		} else {
+		} else
+
+		{
 			if (event.getSource().equals(insertButton)) {
 
 				TreePath path = theAppModel.insertPerson(textVal);
@@ -245,8 +253,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 					theAppModel.deletePerson(selectedNode);
 				return;
 			}
+			// HERE WILL BE AN EDIT BUTTON
+			if (event.getSource().equals(editButton)) {
+
+			}
 
 		}
+
 	}
 
 	public void valueChanged(TreeSelectionEvent event) {
@@ -256,12 +269,18 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 
-		/*
 		if (selectedNode != null) {
-			theTextArea.setText(selectedNode.toString());
+			DictionaryEntry elem = (DictionaryEntry) selectedNode.getUserObject();
+			textField.setText(elem.getValue());
+			textField_1.setText(elem.getName());
+			textField_2.setText(elem.getMiddlename());
+			textField_3.setText(elem.getDob());
+			textField_4.setText(elem.getAddress());
 		}
-		*/
+		/*
+		 * if (selectedNode != null) {
+		 * theTextArea.setText(selectedNode.toString()); }
+		 */
 
 	}
 }
-
