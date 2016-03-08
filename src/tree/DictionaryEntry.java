@@ -43,19 +43,19 @@ public class DictionaryEntry extends DictionaryElem {
 	public String getValue() {
 		return theSurname;
 	}
-	
+
 	public String getName() {
 		return theName;
 	}
-	
+
 	public String getMiddlename() {
 		return theMiddlename;
 	}
-	
+
 	public String getDob() {
 		return theDob;
 	}
-	
+
 	public String getAddress() {
 		return theAddress;
 	}
@@ -66,5 +66,9 @@ public class DictionaryEntry extends DictionaryElem {
 
 	public String getInfo() {
 		return full;
+	}
+
+	public void setInfo(String[] arr) {
+		new DictionaryEntry(arr);
 	}
 }

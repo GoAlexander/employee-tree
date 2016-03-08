@@ -180,7 +180,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		editButton = new JButton("Edit Current Node");
 		editButton.addActionListener(this);
-		editButton.setEnabled(false);
 
 		changeLookFeelButton = new JButton("change Look & Feel");
 		changeLookFeelButton.addActionListener(this);
@@ -280,9 +279,11 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 					theAppModel.deletePerson(selectedNode);
 				return;
 			}
-			// HERE WILL BE AN EDIT BUTTON
+			
 			if (event.getSource().equals(editButton)) {
-
+				if (selectedNode.getParent() != null)
+					theAppModel.editPerson(selectedNode, textVal);
+				return;
 			}
 
 		}

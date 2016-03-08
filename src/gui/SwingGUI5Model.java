@@ -26,7 +26,7 @@ public class SwingGUI5Model {
 	public TreePath findPerson(String[] dataarr) {
 		TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
-		
+
 		anchor.topic = null;
 		anchor.entry = null;
 
@@ -53,10 +53,19 @@ public class SwingGUI5Model {
 		}
 	}
 
+	public void editPerson(DefaultMutableTreeNode selectedNode, String[] arr) {
+		if (selectedNode != theRoot) {
+			DictionaryElem elem = (DictionaryElem) selectedNode.getUserObject();
+			if ("Entry".equals(elem.getType())) {
+				((DictionaryEntry) elem).setInfo(arr);
+			}
+		}
+	}
+
 	public TreePath insertPerson(String[] dataarr) {
 		TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
-	
+
 		anchor.topic = null;
 		anchor.entry = null;
 
@@ -85,7 +94,7 @@ public class SwingGUI5Model {
 
 	protected boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
-		//String[] info = new_entry.getInfo();
+		// String[] info = new_entry.getInfo();
 		String firstLetter = new_entry.getValue().substring(0, 1);
 		boolean result = false;
 
