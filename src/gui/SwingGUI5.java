@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -37,6 +36,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 
+@SuppressWarnings("serial")
 public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
 	private SwingGUI5Model theAppModel;
 
@@ -65,8 +65,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JLabel lblNewLabel_3;
 	private JButton button;
 	private JTextField textField_4;
-	private JSeparator separator;
 	private JButton btnSave;
+	private JButton btnCleanFields;
 
 	protected Component buildGUI() {
 
@@ -93,16 +93,18 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		//Divide right area on two part:
 		//first for image
 		//second for textFields and other
-		JPanel image_panel = new JPanel();
-		scrollPane.setViewportView(image_panel);
-		image_panel.setLayout(new BoxLayout(image_panel, BoxLayout.PAGE_AXIS));
+		JPanel form_panel = new JPanel();
+		scrollPane.setViewportView(form_panel);
+		form_panel.setLayout(new BoxLayout(form_panel, BoxLayout.PAGE_AXIS));
 		
-		//add an image
+		//Add an image
+		//NOTE: image should be not so big!!!
 		ImageIcon img_url = new ImageIcon("/home/alexander/Desktop/image.png"); //here url of image
 		
 		JLabel image_label = new JLabel();
+		image_label.setHorizontalAlignment(SwingConstants.CENTER);
 		image_label.setIcon(img_url); //set image in Jlabel
-		image_panel.add(image_label);
+		form_panel.add(image_label);
 		
 		
 		panel_1 = new JPanel();
@@ -131,28 +133,37 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
 
-		lblNewLabel_2 = new JLabel("DoB");
+		lblNewLabel_2 = new JLabel("Birthday");
 		panel_1.add(lblNewLabel_2);
 
 		textField_3 = new JTextField();
 		panel_1.add(textField_3);
 		textField_3.setColumns(10);
 
-		lblNewLabel_3 = new JLabel("Address");
+		lblNewLabel_3 = new JLabel("Number");
 		panel_1.add(lblNewLabel_3);
 
 		textField_4 = new JTextField();
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
-
-		separator = new JSeparator();
-		panel_1.add(separator);
+		
+		btnCleanFields = new JButton("Clean fields");
+		btnCleanFields.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO clean fields
+			}
+		});
+		panel_1.add(btnCleanFields);
 
 		btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO save fields (NOT insert)
+			}
+		});
 		panel_1.add(btnSave);
 
-		image_panel.add(panel_1); //test
-		// ---
+		form_panel.add(panel_1); //add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
 
@@ -194,7 +205,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		theAppModel = appModel;
 
 		setTitle("Tree  example with model");
-		setSize(800, 350);
+		setSize(800, 360);
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
