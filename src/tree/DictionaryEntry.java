@@ -68,7 +68,12 @@ public class DictionaryEntry extends DictionaryElem {
 		return full;
 	}
 
-	public void setInfo(String[] arr) {
-		new DictionaryEntry(arr);
+	public void setInfo(String[] completeStr) {
+		theSurname = completeStr[0];
+		theName = completeStr[1];
+		theMiddlename = completeStr[2];
+		theDob = completeStr[3];
+		theAddress = completeStr[4];
+		full = theSurname + theName + theMiddlename + theDob + theAddress;
 	}
 }

@@ -45,6 +45,7 @@ public class SwingGUI5Model {
 	}
 
 	public void deletePerson(DefaultMutableTreeNode selectedNode) {
+
 		if (selectedNode != theRoot) {
 			DictionaryElem elem = (DictionaryElem) selectedNode.getUserObject();
 			if ("Entry".equals(elem.getType())) {
@@ -53,13 +54,21 @@ public class SwingGUI5Model {
 		}
 	}
 
-	public void editPerson(DefaultMutableTreeNode selectedNode, String[] arr) {
+	public TreePath editPerson(DefaultMutableTreeNode selectedNode, String[] arr) {
+		TreePath path = null;
+		DictionaryAnchor anchor = new DictionaryAnchor();
+
+		anchor.topic = null;
+		anchor.entry = null;
+
 		if (selectedNode != theRoot) {
 			DictionaryElem elem = (DictionaryElem) selectedNode.getUserObject();
 			if ("Entry".equals(elem.getType())) {
-				((DictionaryEntry) elem).setInfo(arr);
+				deletePerson(selectedNode);
+				path = insertPerson(arr);
 			}
 		}
+		return path;
 	}
 
 	public TreePath insertPerson(String[] dataarr) {
