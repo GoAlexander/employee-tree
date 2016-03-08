@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,7 +46,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 	private JButton changeLookFeelButton;
 
-	private JTextField theTextField;
+	//private JTextField theTextField;
 
 	private UIManager.LookAndFeelInfo installedLF[];
 
@@ -161,13 +162,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel2.add(editButton);
 		panel2.add(changeLookFeelButton);
 
+		//add buttons above:
 		JPanel panel3 = new JPanel();
-		panel3.setLayout(new GridLayout(2, 1));
-
+		panel3.setLayout(new GridLayout(1, 1));
 		panel3.add(panel2);
-
-		theTextField = new JTextField();
-		panel3.add(theTextField);
 
 		contentPane.add(panel3, "South");
 
