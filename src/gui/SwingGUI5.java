@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -33,6 +34,7 @@ import javax.swing.SwingConstants;
 import java.awt.CardLayout;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 
 public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
@@ -87,9 +89,24 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		lblEditorModeexample = new JLabel("Editor mode (example)");
 		scrollPane.setColumnHeaderView(lblEditorModeexample);
-
+		
+		//Divide right area on two part:
+		//first for image
+		//second for textFields and other
+		JPanel image_panel = new JPanel();
+		scrollPane.setViewportView(image_panel);
+		image_panel.setLayout(new BoxLayout(image_panel, BoxLayout.PAGE_AXIS));
+		
+		//add an image
+		ImageIcon img_url = new ImageIcon("/home/alexander/Desktop/image.png"); //here url of image
+		
+		JLabel image_label = new JLabel();
+		image_label.setIcon(img_url); //set image in Jlabel
+		image_panel.add(image_label);
+		
+		
 		panel_1 = new JPanel();
-		scrollPane.setViewportView(panel_1);
+		//scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new GridLayout(6, 2));
 
 		lblSurname = new JLabel("Surname:");
@@ -134,6 +151,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnSave = new JButton("Save");
 		panel_1.add(btnSave);
 
+		image_panel.add(panel_1); //test
 		// ---
 
 		contentPane.add(panel, "Center");
