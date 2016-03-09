@@ -111,6 +111,7 @@ public class SwingGUI5Model {
 			return false;
 		anchor.topic = null;
 
+		@SuppressWarnings("rawtypes")
 		Enumeration en = theRoot.children();
 
 		while (en.hasMoreElements()) {

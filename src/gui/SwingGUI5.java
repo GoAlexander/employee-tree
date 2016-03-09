@@ -2,20 +2,17 @@ package gui;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
@@ -26,20 +23,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import tree.DictionaryElem;
 import tree.DictionaryEntry;
 
 import javax.swing.JLabel;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import java.awt.CardLayout;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JSeparator;
-
-import java.beans.VetoableChangeListener;
-import java.beans.PropertyChangeEvent;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -71,20 +61,20 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JLabel lblNewLabel_2;
 	private JTextField textField_3;
 	private JLabel lblNewLabel_3;
-	private JButton button;
 	private JTextField textField_4;
+	private JLabel image_label = new JLabel();
 	private JButton btnSave;
 	private JButton btnCleanFields;
-	
-	private boolean DEBUG = true; //for debug
+
+	private boolean DEBUG = true; // for debug
 
 	protected Component buildGUI() {
 
 		Container contentPane = this.getContentPane();
 		// contentPane.setLayout (new FlowLayout());
-		
-		//---------------------------------------------------
-		//Tree section
+
+		// ---------------------------------------------------
+		// Tree section
 
 		theTree = new JTree(theAppModel.buildDefaultTreeStructure());
 		// theTree.setEditable(true);
@@ -100,30 +90,33 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		scrollPane.setEnabled(false);
 		panel.add(scrollPane);
 
-		lblEditorModeexample = new JLabel("Editor mode (example)"); //TODO refresh it
+		lblEditorModeexample = new JLabel("Editor mode (example)"); // TODO
+																	// refresh
+																	// it
 		scrollPane.setColumnHeaderView(lblEditorModeexample);
 
-		
-		//---------------------------------------------------
-		//Form section
-		
-		//Divide right area on two part:
-		//first for image
-		//second for textFields and other
+		// ---------------------------------------------------
+		// Form section
+
+		// Divide right area on two part:
+		// first for image
+		// second for textFields and other
 		JPanel form_panel = new JPanel();
 		scrollPane.setViewportView(form_panel);
 		form_panel.setLayout(new BoxLayout(form_panel, BoxLayout.PAGE_AXIS));
-		
-		//Add an image
-		//Images should be 128x128
-		String img_destination = "./images/default.jpg"; //TODO Need in refactoring (get path from person`s class)
-		
-		JLabel image_label = new JLabel();
-		image_label.setIcon( new ImageIcon(img_destination));
+
+		// Add an image
+		// Images should be 128x128
+		String img_destination = "./images/default.jpg"; // TODO Need in
+															// refactoring (get
+															// path from
+															// person`s class)
+
+		image_label.setIcon(new ImageIcon(img_destination));
 		image_label.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {				
-				//Create window for choosing an image
+			public void mouseClicked(MouseEvent e) {
+				// Create window for choosing an image
 				JFileChooser img_chooser = new JFileChooser();
 				img_chooser.setCurrentDirectory(new java.io.File("."));
 				img_chooser.setDialogTitle("Select image");
@@ -133,16 +126,18 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				if (img_chooser.showOpenDialog(image_label) == JFileChooser.APPROVE_OPTION) {
 					if (DEBUG)
 						System.out.println("getSelectedFile(): " + img_chooser.getSelectedFile());
-		  
-				  image_label.setIcon(new ImageIcon( img_chooser.getSelectedFile().toString() )); //updating an image		  
+
+					image_label.setIcon(new ImageIcon(img_chooser.getSelectedFile().toString())); // updating
+																									// an
+																									// image
 				} else {
-				  System.out.println("No Selection!"); //TODO Exception?
+					System.out.println("No Selection!"); // TODO Exception?
 				}
 			}
 		});
 		image_label.setHorizontalAlignment(SwingConstants.CENTER);
 		form_panel.add(image_label);
-		
+
 		panel_1 = new JPanel();
 		// scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new GridLayout(6, 2));
@@ -169,7 +164,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
 
-		//Note: Dob = birthday
+		// Note: Dob = birthday
 		lblNewLabel_2 = new JLabel("Birthday");
 		panel_1.add(lblNewLabel_2);
 
@@ -192,6 +187,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				textField_2.setText("");
 				textField_3.setText("");
 				textField_4.setText("");
+				image_label.setIcon(new ImageIcon(img_destination));
 			}
 		});
 		panel_1.add(btnCleanFields);
@@ -207,10 +203,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
-		
-		//---------------------------------------------------
-		//Menu section
-		
+
+		// ---------------------------------------------------
+		// Menu section
+
 		JPanel panel2 = new JPanel();
 
 		insertButton = new JButton("Insert Person");
@@ -218,12 +214,14 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(this);
+		deleteButton.setEnabled(false);
 
 		findButton = new JButton("Find");
 		findButton.addActionListener(this);
 
 		editButton = new JButton("Edit");
 		editButton.addActionListener(this);
+		editButton.setEnabled(false);
 
 		changeLookFeelButton = new JButton("change Look & Feel");
 		changeLookFeelButton.addActionListener(this);
@@ -270,13 +268,16 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	public void actionPerformed(ActionEvent event) {
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theTree.getLastSelectedPathComponent();
 
-		String[] textVal = new String[5];
+		String[] textVal = new String[6];
 		textVal[0] = textField.getText();
 		textVal[1] = textField_1.getText();
 		textVal[2] = textField_2.getText();
 		textVal[3] = textField_3.getText();
 		textVal[4] = textField_4.getText();
+		textVal[5] = image_label.getIcon().toString();
 
+		//TODO check these fields: Name - no numbers and so on
+		
 		if (textVal.equals(""))
 			textVal[0] = "new";
 
@@ -321,8 +322,11 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				return;
 
 			if (event.getSource().equals(deleteButton)) {
-				if (selectedNode.getParent() != null)
+				if (selectedNode.getParent() != null) {
 					theAppModel.deletePerson(selectedNode);
+					editButton.setEnabled(false);
+					deleteButton.setEnabled(false);
+				}
 				return;
 			}
 
@@ -347,6 +351,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			textField_2.setText(elem.getMiddlename());
 			textField_3.setText(elem.getDob());
 			textField_4.setText(elem.getAddress());
+			image_label.setIcon(new ImageIcon(elem.getPhoto()));
 		}
 
 	}
@@ -357,8 +362,9 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			return;
 		}
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-
 		display(selectedNode);
+		editButton.setEnabled(true);
+		deleteButton.setEnabled(true);
 		/*
 		 * if (selectedNode != null) {
 		 * theTextArea.setText(selectedNode.toString()); }
