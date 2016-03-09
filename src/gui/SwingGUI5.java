@@ -8,8 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,6 +37,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 @SuppressWarnings("serial")
 public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
@@ -67,11 +71,16 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JTextField textField_4;
 	private JButton btnSave;
 	private JButton btnCleanFields;
+	
+	private boolean DEBUG = true; //for debug
 
 	protected Component buildGUI() {
 
 		Container contentPane = this.getContentPane();
 		// contentPane.setLayout (new FlowLayout());
+		
+		//---------------------------------------------------
+		//Tree section
 
 		theTree = new JTree(theAppModel.buildDefaultTreeStructure());
 		// theTree.setEditable(true);
@@ -87,8 +96,12 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		scrollPane.setEnabled(false);
 		panel.add(scrollPane);
 
-		lblEditorModeexample = new JLabel("Editor mode (example)");
+		lblEditorModeexample = new JLabel("Editor mode (example)"); //TODO refresh it
 		scrollPane.setColumnHeaderView(lblEditorModeexample);
+		
+		
+		//---------------------------------------------------
+		//Form section
 		
 		//Divide right area on two part:
 		//first for image
@@ -99,16 +112,35 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		
 		//Add an image
 		//NOTE: image should be not so big!!!
-		ImageIcon img_url = new ImageIcon("/home/alexander/Desktop/image.png"); //here url of image
+		//TODO Need in refactoring (get path from person`s class)
+		String img_destination = "./images/image.png"; //TODO here should be default image! // I think not the best place for this
 		
 		JLabel image_label = new JLabel();
+		image_label.setIcon( new ImageIcon(img_destination));
+		image_label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {				
+				//Create window for choosing an image
+				JFileChooser img_chooser = new JFileChooser();
+				img_chooser.setCurrentDirectory(new java.io.File("."));
+				img_chooser.setDialogTitle("Select image");
+				img_chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				img_chooser.setAcceptAllFileFilterUsed(false);
+
+				if (img_chooser.showOpenDialog(image_label) == JFileChooser.APPROVE_OPTION) {
+					if (DEBUG)
+						System.out.println("getSelectedFile(): " + img_chooser.getSelectedFile());
+		  
+				  image_label.setIcon(new ImageIcon( img_chooser.getSelectedFile().toString() )); //updating an image		  
+				} else {
+				  System.out.println("No Selection!"); //TODO Exception?
+				}
+			}
+		});
 		image_label.setHorizontalAlignment(SwingConstants.CENTER);
-		image_label.setIcon(img_url); //set image in Jlabel
 		form_panel.add(image_label);
 		
-		
 		panel_1 = new JPanel();
-		//scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new GridLayout(6, 2));
 
 		lblSurname = new JLabel("Surname:");
@@ -133,6 +165,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
 
+		//Note: Dob = birthday
 		lblNewLabel_2 = new JLabel("Birthday");
 		panel_1.add(lblNewLabel_2);
 
@@ -147,7 +180,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
 		
-		btnCleanFields = new JButton("Clean fields");
+		btnCleanFields = new JButton("Clear fields");
 		btnCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO clean fields
@@ -166,7 +199,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.add(panel_1); //add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
-
+		
+		//---------------------------------------------------
+		//Menu section
+		
 		JPanel panel2 = new JPanel();
 
 		insertButton = new JButton("Insert Person");
