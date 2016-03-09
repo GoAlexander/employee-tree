@@ -115,9 +115,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.setLayout(new BoxLayout(form_panel, BoxLayout.PAGE_AXIS));
 		
 		//Add an image
-		//NOTE: image should be not so big!!!
-		//TODO Need in refactoring (get path from person`s class)
-		String img_destination = "./images/image.png"; //TODO here should be default image! // I think not the best place for this
+		//Images should be 128x128
+		String img_destination = "./images/default.jpg"; //TODO Need in refactoring (get path from person`s class)
 		
 		JLabel image_label = new JLabel();
 		image_label.setIcon( new ImageIcon(img_destination));
