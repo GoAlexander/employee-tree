@@ -37,6 +37,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
+
+import java.beans.VetoableChangeListener;
+import java.beans.PropertyChangeEvent;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -52,7 +56,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 	private JButton changeLookFeelButton;
 
-	//private JTextField theTextField;
+	// private JTextField theTextField;
 
 	private UIManager.LookAndFeelInfo installedLF[];
 
@@ -98,7 +102,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		lblEditorModeexample = new JLabel("Editor mode (example)"); //TODO refresh it
 		scrollPane.setColumnHeaderView(lblEditorModeexample);
-		
+
 		
 		//---------------------------------------------------
 		//Form section
@@ -141,6 +145,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.add(image_label);
 		
 		panel_1 = new JPanel();
+		// scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new GridLayout(6, 2));
 
 		lblSurname = new JLabel("Surname:");
@@ -179,11 +184,15 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_4 = new JTextField();
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
-		
-		btnCleanFields = new JButton("Clear fields");
+
+		btnCleanFields = new JButton("Clean fields");
 		btnCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO clean fields
+				textField.setText("");
+				textField_1.setText("");
+				textField_2.setText("");
+				textField_3.setText("");
+				textField_4.setText("");
 			}
 		});
 		panel_1.add(btnCleanFields);
@@ -191,12 +200,12 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO save fields (NOT insert)
+				// TODO save fields (NOT insert)
 			}
 		});
 		panel_1.add(btnSave);
 
-		form_panel.add(panel_1); //add panel of textFields to Boxlayout
+		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
 		
@@ -214,9 +223,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		findButton = new JButton("Find");
 		findButton.addActionListener(this);
 
-		editButton = new JButton("Edit Current Node");
+		editButton = new JButton("Edit");
 		editButton.addActionListener(this);
-		editButton.setEnabled(false);
 
 		changeLookFeelButton = new JButton("change Look & Feel");
 		changeLookFeelButton.addActionListener(this);
@@ -227,7 +235,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel2.add(editButton);
 		panel2.add(changeLookFeelButton);
 
-		//add buttons above:
+		// add buttons above:
 		JPanel panel3 = new JPanel();
 		panel3.setLayout(new GridLayout(1, 1));
 		panel3.add(panel2);
@@ -298,6 +306,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				TreePath path = theAppModel.insertPerson(textVal);
 				if (path != null) {
 					theTree.scrollPathToVisible(path);
+					theTree.setSelectionPath(path);
 				}
 			}
 			if (event.getSource().equals(findButton)) {
@@ -305,6 +314,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				TreePath path = theAppModel.findPerson(textVal);
 				if (path != null) {
 					theTree.scrollPathToVisible(path);
+					theTree.setSelectionPath(path);
 				}
 			}
 
@@ -316,22 +326,21 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 					theAppModel.deletePerson(selectedNode);
 				return;
 			}
-			// HERE WILL BE AN EDIT BUTTON
-			if (event.getSource().equals(editButton)) {
 
+			if (event.getSource().equals(editButton)) {
+				TreePath path = theAppModel.editPerson(selectedNode, textVal);
+				if (path != null) {
+					theTree.scrollPathToVisible(path);
+					theTree.setSelectionPath(path);
+				}
+				return;
 			}
 
 		}
 
 	}
 
-	public void valueChanged(TreeSelectionEvent event) {
-		TreePath path = theTree.getSelectionPath();
-		if (path == null)
-			return;
-
-		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-
+	private void display(DefaultMutableTreeNode selectedNode) {
 		if (selectedNode != null) {
 			DictionaryEntry elem = (DictionaryEntry) selectedNode.getUserObject();
 			textField.setText(elem.getValue());
@@ -340,6 +349,17 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			textField_3.setText(elem.getDob());
 			textField_4.setText(elem.getAddress());
 		}
+
+	}
+
+	public void valueChanged(TreeSelectionEvent event) {
+		TreePath path = theTree.getSelectionPath();
+		if (path == null) {
+			return;
+		}
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+		display(selectedNode);
 		/*
 		 * if (selectedNode != null) {
 		 * theTextArea.setText(selectedNode.toString()); }
