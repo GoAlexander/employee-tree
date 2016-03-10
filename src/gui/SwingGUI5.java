@@ -33,6 +33,7 @@ import javax.swing.ImageIcon;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
@@ -66,6 +67,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JButton btnCleanFields;
 
 	private boolean DEBUG = true; // for debug
+	private String img_default = "./images/default.jpg";
 
 	protected Component buildGUI() {
 
@@ -89,9 +91,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		scrollPane.setEnabled(false);
 		panel.add(scrollPane);
 
-		lblEditorModeexample = new JLabel("Editor mode (example)"); // TODO
-																	// refresh
-																	// it
+		lblEditorModeexample = new JLabel("Editor:");
+		lblEditorModeexample.setFont(new Font("Dialog", Font.BOLD, 17));
 		scrollPane.setColumnHeaderView(lblEditorModeexample);
 
 		// ---------------------------------------------------
@@ -106,10 +107,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		// Add an image
 		// Images should be 128x128
-		String img_destination = "./images/default.jpg"; // TODO Need in
-															// refactoring (get
-															// path from
-															// person`s class)
+		String img_destination = img_default; // TODO Need in
+												// refactoring (get
+												// path from
+												// person`s class)
 
 		image_label.setIcon(new ImageIcon(img_destination));
 		image_label.addMouseListener(new MouseAdapter() {
@@ -139,7 +140,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		panel_1 = new JPanel();
 		// scrollPane.setViewportView(panel_1);
-		panel_1.setLayout(new GridLayout(6, 2));
+		panel_1.setLayout(new GridLayout(5, 2));
 
 		lblSurname = new JLabel("Surname:");
 		panel_1.add(lblSurname);
@@ -178,19 +179,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
 
-		btnCleanFields = new JButton("Clean fields");
-		btnCleanFields.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textField.setText("");
-				textField_1.setText("");
-				textField_2.setText("");
-				textField_3.setText("");
-				textField_4.setText("");
-				image_label.setIcon(new ImageIcon(img_destination));
-			}
-		});
-		panel_1.add(btnCleanFields);
-		
 		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
@@ -214,6 +202,19 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		editButton.addActionListener(this);
 		editButton.setEnabled(false);
 
+		btnCleanFields = new JButton("Clean form");
+		btnCleanFields.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textField.setText("");
+				textField_1.setText("");
+				textField_2.setText("");
+				textField_3.setText("");
+				textField_4.setText("");
+				image_label.setIcon(new ImageIcon(img_default)); // set default
+																	// image
+			}
+		});
+
 		changeLookFeelButton = new JButton("change Look & Feel");
 		changeLookFeelButton.addActionListener(this);
 
@@ -221,6 +222,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel2.add(deleteButton);
 		panel2.add(findButton);
 		panel2.add(editButton);
+		panel2.add(btnCleanFields);
 		panel2.add(changeLookFeelButton);
 
 		// add buttons above:
@@ -267,8 +269,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textVal[4] = textField_4.getText();
 		textVal[5] = image_label.getIcon().toString();
 
-		//TODO check these fields: Name - no numbers and so on
-		
+		// TODO check these fields: Name - no numbers and so on
+
 		if (textVal.equals(""))
 			textVal[0] = "new";
 
