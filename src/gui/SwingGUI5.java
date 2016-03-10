@@ -63,7 +63,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JLabel lblNewLabel_3;
 	private JTextField textField_4;
 	private JLabel image_label = new JLabel();
-	private JButton btnSave;
 	private JButton btnCleanFields;
 
 	private boolean DEBUG = true; // for debug
@@ -191,15 +190,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			}
 		});
 		panel_1.add(btnCleanFields);
-
-		btnSave = new JButton("Save");
-		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO save fields (NOT insert)
-			}
-		});
-		panel_1.add(btnSave);
-
+		
 		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
@@ -219,7 +210,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		findButton = new JButton("Find");
 		findButton.addActionListener(this);
 
-		editButton = new JButton("Edit");
+		editButton = new JButton("Save changes");
 		editButton.addActionListener(this);
 		editButton.setEnabled(false);
 
