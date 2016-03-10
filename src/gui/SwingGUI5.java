@@ -146,14 +146,14 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		lblSurname = new JLabel("Surname:");
 		panel_1.add(lblSurname);
-		
+
 		textField = new JTextField();
 		lblSurname.setLabelFor(textField);
 		panel_1.add(textField);
 		textField.setColumns(10);
-		
-		//((AbstractDocument) textField.getDocument()).setDocumentFilter(new StringFilter());//test
 
+		// ((AbstractDocument) textField.getDocument()).setDocumentFilter(new
+		// StringFilter());//test
 
 		JLabel lblNewLabel = new JLabel("Name:");
 		panel_1.add(lblNewLabel);
@@ -183,9 +183,9 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_4 = new JTextField();
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
-		
-		//PlainDocument doc = (PlainDocument) textField_4.getDocument(); //test
-	    //doc.setDocumentFilter(new IntFilter()); //test
+
+		// PlainDocument doc = (PlainDocument) textField_4.getDocument(); //test
+		// doc.setDocumentFilter(new IntFilter()); //test
 
 		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
@@ -277,22 +277,20 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textVal[4] = textField_4.getText();
 		textVal[5] = image_label.getIcon().toString();
 
-		
-		//Checking fields:
-		if (Filter.letter_filter(textVal[0]) == true && Filter.letter_filter(textVal[1]) == true &&
-				Filter.letter_filter(textVal[2]) == true && Filter.numeric_filter(textVal[3]) == true &&
-				Filter.numeric_filter(textVal[4]) == true) {
+		// Checking fields:
+		if (Filter.letter_filter(textVal[0]) == true && Filter.letter_filter(textVal[1]) == true
+				&& Filter.letter_filter(textVal[2]) == true && Filter.numeric_filter(textVal[3]) == true
+				&& Filter.numeric_filter(textVal[4]) == true) {
 			operations(event, selectedNode, textVal);
 		} else {
-			System.out.println("Error!"); //TODO Exceptions???
+			System.out.println("Error!"); // TODO Exceptions???
 			JOptionPane.showMessageDialog(null, "Invalid data in fields!");
 		}
-		
-		
+
 		if (textVal.equals(""))
 			textVal[0] = "new";
-		
-		//Look&Feel button action
+
+		// Look&Feel button action
 		if (event.getSource().equals(changeLookFeelButton))
 
 		{
@@ -312,9 +310,9 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			}
 		}
 	}
-	
-	//here are all actions for buttons
-	private void operations(ActionEvent event, DefaultMutableTreeNode selectedNode, String [] textVal) {
+
+	// here are all actions for buttons
+	private void operations(ActionEvent event, DefaultMutableTreeNode selectedNode, String[] textVal) {
 		if (event.getSource().equals(insertButton)) {
 
 			TreePath path = theAppModel.insertPerson(textVal);
@@ -336,25 +334,40 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			return;
 
 		if (event.getSource().equals(deleteButton)) {
-			if (selectedNode.getParent() != null) {
-				theAppModel.deletePerson(selectedNode);
-				editButton.setEnabled(false);
-				deleteButton.setEnabled(false);
-			}
-			return;
+			// confirm deleting
+			int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Delete?",
+					JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) { // if yes
+
+				if (selectedNode.getParent() != null) {
+					theAppModel.deletePerson(selectedNode);
+					editButton.setEnabled(false);
+					deleteButton.setEnabled(false);
+				}
+				return;
+
+			} else // if no - do nothing
+				return;
 		}
 
 		if (event.getSource().equals(editButton)) {
-			TreePath path = theAppModel.editPerson(selectedNode, textVal);
-			if (path != null) {
-				theTree.scrollPathToVisible(path);
-				theTree.setSelectionPath(path);
-			}
-			return;
-		}	
+			// confirm editing
+			int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to edit current profile?", "Edit?",
+					JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) { // if yes
+
+				TreePath path = theAppModel.editPerson(selectedNode, textVal);
+				if (path != null) {
+					theTree.scrollPathToVisible(path);
+					theTree.setSelectionPath(path);
+				}
+				return;
+
+			} else // if no - do nothing
+				return;
+		}
 	}
-	
-	
+
 	private void display(DefaultMutableTreeNode selectedNode) {
 		if (selectedNode != null) {
 			DictionaryEntry elem = (DictionaryEntry) selectedNode.getUserObject();
