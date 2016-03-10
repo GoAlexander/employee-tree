@@ -70,6 +70,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 	private boolean DEBUG = true; // for debug
 	private String img_default = "./images/default.jpg";
+	private JButton btnFindNext;
 
 	protected Component buildGUI() {
 
@@ -205,6 +206,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		findButton = new JButton("Find");
 		findButton.addActionListener(this);
+		
+		btnFindNext = new JButton("Find Next");
+		btnFindNext.addActionListener(this);
+		btnFindNext.setEnabled(false);
 
 		editButton = new JButton("Save changes");
 		editButton.addActionListener(this);
@@ -229,6 +234,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel2.add(insertButton);
 		panel2.add(deleteButton);
 		panel2.add(findButton);
+		panel2.add(btnFindNext);
 		panel2.add(editButton);
 		panel2.add(btnCleanFields);
 		panel2.add(changeLookFeelButton);
@@ -326,8 +332,15 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			TreePath path = theAppModel.findPerson(textVal);
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
+				theTree.removeSelectionPath(path);
 				theTree.setSelectionPath(path);
+				btnFindNext.setEnabled(true);
 			}
+		}
+		
+		if (event.getSource().equals(btnFindNext)) {
+
+			//TODO find next
 		}
 
 		if (selectedNode == null)

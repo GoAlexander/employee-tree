@@ -86,11 +86,17 @@ public class DictionaryEntry extends DictionaryElem {
 		return full;
 	}
 
-	public boolean checkInfo(String[] data) {
+	public boolean checkInfo(DictionaryEntry elem) {
+		String[] data = new String[5];
+		data[0] = elem.getValue();
+		data[1] = elem.getName();
+		data[2] = elem.getMiddlename();
+		data[3] = elem.getDob();
+		data[4] = elem.getAddress();
 
 		boolean result = false;
 		for (int i = 0; i < data.length; i++) {
-			if (data[i] != "") {
+			if (!this.info[i].equals("")) {
 				if (this.info[i].equals(data[i]))
 					result = true;
 				else
@@ -99,4 +105,5 @@ public class DictionaryEntry extends DictionaryElem {
 		}
 		return result;
 	}
+
 }
