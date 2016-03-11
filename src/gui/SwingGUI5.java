@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -21,9 +22,12 @@ import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import tree.DictionaryAnchor;
+import tree.DictionaryElem;
 import tree.DictionaryEntry;
 import filter.*;
 
@@ -256,23 +260,25 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			public void windowClosing(WindowEvent e) {
 				int reply = JOptionPane.showConfirmDialog(null, "Save changes before you exit?", "Exit",
 						JOptionPane.YES_NO_CANCEL_OPTION);
-				if (reply == JOptionPane.YES_OPTION) { // if yes - save and exit
-					//TODO save Jtree
+				if (reply == JOptionPane.YES_OPTION) { // if yes - save Tree and exit
 					
-					//proof of concept (!) (test)
-					//make it in external method
+					
+					//TODO make it in external method
 					Object o = theTree.getModel().getRoot(); //TODO rewrite!
-					//DictionaryEntry myDictionaryEntry = new DictionaryEntry();
-					DictionaryEntry elem; 
+					DictionaryEntry elem;
+					DefaultMutableTreeNode node, nodeElem;
+					Enumeration en;
 					for (int i=0; i < theTree.getModel().getChildCount( o ); i++) {
-						System.out.println(theTree.getModel().getChild( o, i)); //It is nodes but we need elements!
-						
-						//Not working. Work in progress...
-						elem = (DictionaryEntry)((DefaultMutableTreeNode) theTree.getModel().getChild( o, i)).getUserObject();
-						System.out.println( elem.getInfo() );
+						node = (DefaultMutableTreeNode) theTree.getModel().getChild( o, i);
+												
+						en = node.children(); // get all instances of current node
+						while (en.hasMoreElements()) {
+							nodeElem = (DefaultMutableTreeNode) en.nextElement();
 
+							elem = (DictionaryEntry) nodeElem.getUserObject(); //get instance
+							System.out.println( elem.toString()); //TODO toString add photo! 
+						}
 					}
-					
 					
 					System.exit(0);
 				}
