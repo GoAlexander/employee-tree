@@ -47,7 +47,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JButton deleteButton;
 	private JButton findButton;
 	private JButton editButton;
-
+	private int i = 0;
 	private JButton changeLookFeelButton;
 
 	// private JTextField theTextField;
@@ -80,7 +80,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		// ---------------------------------------------------
 		// Tree section
-
 		theTree = new JTree(theAppModel.buildDefaultTreeStructure());
 		// theTree.setEditable(true);
 		theTree.addTreeSelectionListener(this);
@@ -246,7 +245,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 	public SwingGUI5(SwingGUI5Model appModel) {
 		theAppModel = appModel;
-
 		setTitle("Tree  example with model");
 		setSize(820, 360);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -257,31 +255,38 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				int reply = JOptionPane.showConfirmDialog(null, "Save changes before you exit?", "Exit",
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (reply == JOptionPane.YES_OPTION) { // if yes - save and exit
-					//TODO save Jtree
-					
-					//proof of concept (!) (test)
-					//make it in external method
-					Object o = theTree.getModel().getRoot(); //TODO rewrite!
-					//DictionaryEntry myDictionaryEntry = new DictionaryEntry();
-					DictionaryEntry elem; 
-					for (int i=0; i < theTree.getModel().getChildCount( o ); i++) {
-						System.out.println(theTree.getModel().getChild( o, i)); //It is nodes but we need elements!
-						
-						//Not working. Work in progress...
-						elem = (DictionaryEntry)((DefaultMutableTreeNode) theTree.getModel().getChild( o, i)).getUserObject();
-						System.out.println( elem.getInfo() );
+					// TODO save Jtree
+
+					// proof of concept (!) (test)
+					// make it in external method
+					Object o = theTree.getModel().getRoot(); // TODO rewrite!
+					// DictionaryEntry myDictionaryEntry = new
+					// DictionaryEntry();
+					DictionaryEntry elem;
+					for (int i = 0; i < theTree.getModel().getChildCount(o); i++) {
+						System.out.println(theTree.getModel().getChild(o, i)); // It
+																				// is
+																				// nodes
+																				// but
+																				// we
+																				// need
+																				// elements!
+
+						// Not working. Work in progress...
+						elem = (DictionaryEntry) ((DefaultMutableTreeNode) theTree.getModel().getChild(o, i))
+								.getUserObject();
+						System.out.println(elem.getInfo());
 
 					}
-					
-					
+
 					System.exit(0);
 				}
-				if (reply == JOptionPane.CANCEL_OPTION) { //if cancel - return
+				if (reply == JOptionPane.CANCEL_OPTION) { // if cancel - return
 
 				}
 				if (reply == JOptionPane.NO_OPTION) {
 					System.exit(0); // if no - exit
-				}	
+				}
 			}
 		});
 
@@ -298,7 +303,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 	public void actionPerformed(ActionEvent event) {
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theTree.getLastSelectedPathComponent();
-
 		String[] textVal = new String[6];
 		textVal[0] = textField.getText();
 		textVal[1] = textField_1.getText();
@@ -311,7 +315,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		if (Filter.letter_filter(textVal[0]) == true && Filter.letter_filter(textVal[1]) == true
 				&& Filter.letter_filter(textVal[2]) == true && Filter.numeric_filter(textVal[3]) == true
 				&& Filter.numeric_filter(textVal[4]) == true) {
-			operations(event, selectedNode, textVal);
+			operations(event, selectedNode, textVal, i);
 		} else {
 			JOptionPane.showMessageDialog(null, "Invalid data in fields!");
 		}
@@ -341,7 +345,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	}
 
 	// here are all actions for buttons
-	private void operations(ActionEvent event, DefaultMutableTreeNode selectedNode, String[] textVal) {
+	private void operations(ActionEvent event, DefaultMutableTreeNode selectedNode, String[] textVal, Integer i) {
 		if (event.getSource().equals(insertButton)) {
 
 			TreePath path = theAppModel.insertPerson(textVal);
@@ -351,19 +355,23 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			}
 		}
 		if (event.getSource().equals(findButton)) {
-
-			TreePath path = theAppModel.findPerson(textVal);
+			i = 0;
+			TreePath path = theAppModel.findPerson(textVal, i);
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
-				theTree.removeSelectionPath(path);
-				theTree.setSelectionPath(path);
 				btnFindNext.setEnabled(true);
 			}
 		}
 
 		if (event.getSource().equals(btnFindNext)) {
-
-			// TODO find next
+			System.out.println(i);
+			i = i + 1;
+			System.out.println(i);
+			TreePath path = theAppModel.findPerson(textVal, i);
+			if (path != null) {
+				theTree.scrollPathToVisible(path);
+				btnFindNext.setEnabled(true);
+			}
 		}
 
 		if (selectedNode == null)
