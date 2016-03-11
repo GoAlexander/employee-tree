@@ -258,6 +258,22 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (reply == JOptionPane.YES_OPTION) { // if yes - save and exit
 					//TODO save Jtree
+					
+					//proof of concept (!) (test)
+					//make it in external method
+					Object o = theTree.getModel().getRoot(); //TODO rewrite!
+					//DictionaryEntry myDictionaryEntry = new DictionaryEntry();
+					DictionaryEntry elem; 
+					for (int i=0; i < theTree.getModel().getChildCount( o ); i++) {
+						System.out.println(theTree.getModel().getChild( o, i)); //It is nodes but we need elements!
+						
+						//Not working. Work in progress...
+						elem = (DictionaryEntry)((DefaultMutableTreeNode) theTree.getModel().getChild( o, i)).getUserObject();
+						System.out.println( elem.getInfo() );
+
+					}
+					
+					
 					System.exit(0);
 				}
 				if (reply == JOptionPane.CANCEL_OPTION) { //if cancel - return

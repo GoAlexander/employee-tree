@@ -78,6 +78,7 @@ public class DictionaryEntry extends DictionaryElem {
 		return thePhoto;
 	}
 
+	@Override
 	public String toString() {
 		return theSurname + " " + theName + " " + theMiddlename + " " + theDob + " " + theAddress;
 	}
