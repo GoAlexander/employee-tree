@@ -83,12 +83,16 @@ public class DictionaryEntry extends DictionaryElem {
 		return theSurname + " " + theName + " " + theMiddlename + " " + theDob + " " + theAddress;
 	}
 
+	public String getFullInfo() {
+		return theSurname + " " + theName + " " + theMiddlename + " " + theDob + " " + theAddress + " " + thePhoto;
+	}
+
 	public String getInfo() {
 		return full;
 	}
 
 	public boolean checkInfo(DictionaryEntry elem) {
-		
+
 		String[] data = new String[5];
 		data[0] = elem.getValue();
 		data[1] = elem.getName();

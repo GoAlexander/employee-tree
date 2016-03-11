@@ -168,7 +168,7 @@ public class SwingGUI5Model {
 
 			DictionaryElem elem = (DictionaryElem) node.getUserObject();
 			if ("Topic".equals(elem.getType())) {
-				if (firstLetter.equalsIgnoreCase(elem.getInfo())) {
+				if (firstLetter.equalsIgnoreCase(elem.getValue())) {
 					anchor.topic = node;
 					break;
 				}

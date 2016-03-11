@@ -11,7 +11,7 @@ public class DictionaryTopic extends DictionaryElem {
 		return "Topic";
 	}
 
-	public String getInfo() {
+	public String getValue() {
 		return theTopic;
 	}
 
