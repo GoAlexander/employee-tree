@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -15,6 +16,7 @@ import tree.DictionaryTopic;
 
 public class SwingGUI5Model {
 
+	private ArrayList<DefaultMutableTreeNode> matches = new ArrayList<DefaultMutableTreeNode>();
 	private DefaultTreeModel theModel;
 	private static String alphabet = new String("ABCDEFGIJKLMNOPRSTUVWXYZ");
 	private DefaultMutableTreeNode theRoot;
@@ -23,8 +25,27 @@ public class SwingGUI5Model {
 
 	}
 
-	public TreePath findPerson(String[] dataarr) {
-		TreePath path;
+	private TreePath search(DictionaryEntry new_entry, DictionaryAnchor anchor, int i) {
+		matches.clear(); // очищаю ранее найденные результаты
+		findInfo(new_entry, anchor);
+		return selectMatch(i);
+	}
+
+	private TreePath selectMatch(
+			int index) { /*
+							 * если список найденных узлов не пуст и идекс
+							 * соответствует размерности списка выделяю путь к
+							 * этому узлу
+							 */
+		if (!matches.isEmpty() && index < matches.size() && index >= 0)
+			return new TreePath((matches.get(index)).getPath());
+		else
+			return null;
+	}
+
+	public TreePath findPerson(String[] dataarr, int i) {
+
+		// TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
 
 		anchor.topic = null;
@@ -32,16 +53,7 @@ public class SwingGUI5Model {
 
 		DictionaryEntry new_entry = new DictionaryEntry(dataarr);
 
-		if (this.findInfo(new_entry, anchor)) {
-			TreeNode[] nodes = theModel.getPathToRoot(anchor.entry);
-			path = new TreePath(nodes);
-
-		} else {
-			// not found
-			path = null;
-		}
-
-		return path;
+		return this.search(new_entry, anchor, i);
 	}
 
 	public void deletePerson(DefaultMutableTreeNode selectedNode) {
@@ -101,51 +113,41 @@ public class SwingGUI5Model {
 		return path;
 	}
 
-	protected boolean findInfo(DictionaryEntry new_entry, DictionaryAnchor anchor) {
-
-		String firstLetter = new_entry.getValue().substring(0, 1);
-		boolean result = false;
+	protected void findInfo(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
 		if (anchor == null)
-			return false;
+			return;
 		anchor.topic = null;
 
 		@SuppressWarnings("rawtypes")
-		Enumeration en = theRoot.children();
+		Enumeration en1 = theRoot.children();
 
-		while (en.hasMoreElements()) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) en.nextElement();
+		while (en1.hasMoreElements()) {
+			DefaultMutableTreeNode node1 = (DefaultMutableTreeNode) en1.nextElement();
 
-			DictionaryElem elem = (DictionaryElem) node.getUserObject();
-			if ("Topic".equals(elem.getType())) {
-				if (firstLetter.equalsIgnoreCase(elem.getValue())) {
-					anchor.topic = node;
-					break;
-				}
-			} else {
-				break;
-			}
-		}
+			DictionaryElem elem1 = (DictionaryElem) node1.getUserObject();
+			if ("Topic".equals(elem1.getType()))
+				anchor.topic = node1;
 
-		if (anchor.topic != null) {
-			en = anchor.topic.children();
-			anchor.entry = null;
+			if (anchor.topic != null) {
+				@SuppressWarnings("rawtypes")
+				Enumeration en2 = anchor.topic.children();
+				anchor.entry = null;
 
-			while (en.hasMoreElements()) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) en.nextElement();
+				while (en2.hasMoreElements()) {
+					DefaultMutableTreeNode node2 = (DefaultMutableTreeNode) en2.nextElement();
 
-				DictionaryEntry elem = (DictionaryEntry) node.getUserObject();
-				if ("Entry".equals(elem.getType())) {
-					if (new_entry.checkInfo(elem)) {
-						anchor.entry = node;
-						result = true;
-						break;
+					DictionaryEntry elem2 = (DictionaryEntry) node2.getUserObject();
+					if ("Entry".equals(elem2.getType())) {
+						if (new_entry.checkInfo(elem2)) {
+							anchor.entry = node2;
+							matches.add(node2);
+						}
 					}
 				}
 			}
 
 		}
-		return result;
 	}
 
 	protected boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
@@ -166,7 +168,7 @@ public class SwingGUI5Model {
 
 			DictionaryElem elem = (DictionaryElem) node.getUserObject();
 			if ("Topic".equals(elem.getType())) {
-				if (firstLetter.equalsIgnoreCase(elem.getValue())) {
+				if (firstLetter.equalsIgnoreCase(elem.getInfo())) {
 					anchor.topic = node;
 					break;
 				}

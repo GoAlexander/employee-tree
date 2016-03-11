@@ -88,6 +88,7 @@ public class DictionaryEntry extends DictionaryElem {
 	}
 
 	public boolean checkInfo(DictionaryEntry elem) {
+		
 		String[] data = new String[5];
 		data[0] = elem.getValue();
 		data[1] = elem.getName();
