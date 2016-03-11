@@ -3,10 +3,14 @@ package gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
@@ -109,7 +114,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.setLayout(new BoxLayout(form_panel, BoxLayout.PAGE_AXIS));
 
 		// Add an image
-		// Images should be 128x128
 		String img_destination = img_default; // TODO Need in
 												// refactoring (get
 												// path from
@@ -129,12 +133,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				if (img_chooser.showOpenDialog(image_label) == JFileChooser.APPROVE_OPTION) {
 					if (DEBUG)
 						System.out.println("getSelectedFile(): " + img_chooser.getSelectedFile());
+					
+					
+					//Update an image and set 128x128 size
+					image_label.setIcon(new ImageIcon(new ImageIcon( img_chooser.getSelectedFile().toString() ).getImage().getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
 
-					image_label.setIcon(new ImageIcon(img_chooser.getSelectedFile().toString())); // updating
-																									// an
-																									// image
 				} else {
-					System.out.println("No Selection!"); // TODO Exception?
+					System.out.println("No Selection!");
 				}
 			}
 		});
@@ -152,9 +157,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		lblSurname.setLabelFor(textField);
 		panel_1.add(textField);
 		textField.setColumns(10);
-
-		// ((AbstractDocument) textField.getDocument()).setDocumentFilter(new
-		// StringFilter());//test
 
 		JLabel lblNewLabel = new JLabel("Name:");
 		panel_1.add(lblNewLabel);
@@ -184,9 +186,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_4 = new JTextField();
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
-
-		// PlainDocument doc = (PlainDocument) textField_4.getDocument(); //test
-		// doc.setDocumentFilter(new IntFilter()); //test
 
 		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
@@ -228,7 +227,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			}
 		});
 
-		changeLookFeelButton = new JButton("change Look & Feel");
+		changeLookFeelButton = new JButton("change Look&Feel");
 		changeLookFeelButton.addActionListener(this);
 
 		panel2.add(insertButton);
@@ -253,7 +252,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		theAppModel = appModel;
 
 		setTitle("Tree  example with model");
-		setSize(800, 360);
+		setSize(820, 360);
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
