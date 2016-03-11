@@ -8,9 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -34,7 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
@@ -133,10 +129,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				if (img_chooser.showOpenDialog(image_label) == JFileChooser.APPROVE_OPTION) {
 					if (DEBUG)
 						System.out.println("getSelectedFile(): " + img_chooser.getSelectedFile());
-					
-					
-					//Update an image and set 128x128 size
-					image_label.setIcon(new ImageIcon(new ImageIcon( img_chooser.getSelectedFile().toString() ).getImage().getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
+
+					// Update an image and set 128x128 size
+					image_label.setIcon(new ImageIcon(new ImageIcon(img_chooser.getSelectedFile().toString()).getImage()
+							.getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
 
 				} else {
 					System.out.println("No Selection!");
@@ -205,7 +201,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		findButton = new JButton("Find");
 		findButton.addActionListener(this);
-		
+
 		btnFindNext = new JButton("Find Next");
 		btnFindNext.addActionListener(this);
 		btnFindNext.setEnabled(false);
@@ -253,10 +249,23 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 		setTitle("Tree  example with model");
 		setSize(820, 360);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				int reply = JOptionPane.showConfirmDialog(null, "Save changes before you exit?", "Exit",
+						JOptionPane.YES_NO_CANCEL_OPTION);
+				if (reply == JOptionPane.YES_OPTION) { // if yes - save and exit
+					//TODO save Jtree
+					System.exit(0);
+				}
+				if (reply == JOptionPane.CANCEL_OPTION) { //if cancel - return
+
+				}
+				if (reply == JOptionPane.NO_OPTION) {
+					System.exit(0); // if no - exit
+				}	
 			}
 		});
 
@@ -288,7 +297,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				&& Filter.numeric_filter(textVal[4]) == true) {
 			operations(event, selectedNode, textVal);
 		} else {
-			System.out.println("Error!"); // TODO Exceptions???
 			JOptionPane.showMessageDialog(null, "Invalid data in fields!");
 		}
 
@@ -336,10 +344,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				btnFindNext.setEnabled(true);
 			}
 		}
-		
+
 		if (event.getSource().equals(btnFindNext)) {
 
-			//TODO find next
+			// TODO find next
 		}
 
 		if (selectedNode == null)
