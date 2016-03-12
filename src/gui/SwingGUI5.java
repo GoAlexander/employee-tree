@@ -453,7 +453,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			textField_2.setText(elem.getMiddlename());
 			textField_3.setText(elem.getDob());
 			textField_4.setText(elem.getAddress());
-			image_label.setIcon(new ImageIcon(new ImageIcon(elem.getPhoto()).getImage()));
+			image_label.setIcon(new ImageIcon(
+					new ImageIcon(elem.getPhoto()).getImage().getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
 		}
 
 	}

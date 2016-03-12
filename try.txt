@@ -1,2 +1,2 @@
-Alexander Sergeev Viktorovich 16.01.1997 1 ./images/default.jpg
 Dydychkin Alexander Alekseevich 16.12.1995 2 ./images/default.jpg
+Sergeev Alexander Viktorovich 16.01.1997 1 C:\Users\viktor\Documents\Workspace\employee-tree\images\IMAG0025.jpg
