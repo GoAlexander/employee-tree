@@ -18,7 +18,7 @@ public class SwingGUI5Model {
 
 	private ArrayList<DefaultMutableTreeNode> matches = new ArrayList<DefaultMutableTreeNode>();
 	private DefaultTreeModel theModel;
-	private static String alphabet = new String("ABCDEFGIJKLMNOPRSTUVWXYZ");
+	private static String alphabet = new String("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	private DefaultMutableTreeNode theRoot;
 
 	public SwingGUI5Model() {
@@ -26,16 +26,16 @@ public class SwingGUI5Model {
 	}
 
 	private TreePath search(DictionaryEntry new_entry, DictionaryAnchor anchor, int i) {
-		matches.clear(); // очищаю ранее найденные результаты
+		matches.clear(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		findInfo(new_entry, anchor);
 		return selectMatch(i);
 	}
 
 	private TreePath selectMatch(
 			int index) { /*
-							 * если список найденных узлов не пуст и идекс
-							 * соответствует размерности списка выделяю путь к
-							 * этому узлу
+							 * пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
+							 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ
+							 * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 							 */
 		if (!matches.isEmpty() && index < matches.size() && index >= 0)
 			return new TreePath((matches.get(index)).getPath());

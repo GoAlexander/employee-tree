@@ -48,6 +48,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JButton findButton;
 	private JButton editButton;
 	private int next = 0;
+	private String[] nextSearch;
 	private String selectedfile;
 	private JButton changeLookFeelButton;
 
@@ -370,22 +371,32 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		}
 		if (event.getSource().equals(findButton)) {
 			setNext(0);
+			nextSearch=null;
 			TreePath path = theAppModel.findPerson(textVal, getNext());
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
+				theTree.removeSelectionPath(path);
+				theTree.setSelectionPath(path);
 				btnFindNext.setEnabled(true);
+				nextSearch=textVal;
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Nothing found!");
+				return;
 			}
 			setNext(1);
 		}
 
 		if (event.getSource().equals(btnFindNext)) {
-			TreePath path = theAppModel.findPerson(textVal, getNext());
+			TreePath path = theAppModel.findPerson(nextSearch, getNext());
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
+				theTree.setSelectionPath(path);
 				setNext(getNext() + 1);
 			} else
 				setNext(0);
-			path = theAppModel.findPerson(textVal, getNext());
+			path = theAppModel.findPerson(nextSearch, getNext());
 			if (path == null) {
 				setNext(0);
 			}
@@ -417,7 +428,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to edit current profile?", "Edit?",
 					JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) { // if yes
-
+				if (textVal[0].equals("") || textVal[1].equals("") || textVal[3].equals("") || textVal[4].equals("")) {
+					JOptionPane.showMessageDialog(null, "Invalid data in fields!");
+					return;
+				}
 				TreePath path = theAppModel.editPerson(selectedNode, textVal);
 				if (path != null) {
 					theTree.scrollPathToVisible(path);
@@ -453,7 +467,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		display(selectedNode);
 		editButton.setEnabled(true);
 		deleteButton.setEnabled(true);
-		btnFindNext.setEnabled(false);
 		/*
 		 * if (selectedNode != null) {
 		 * theTextArea.setText(selectedNode.toString()); }
