@@ -25,13 +25,8 @@ public class DictionaryEntry extends DictionaryElem {
 		info[4] = address;
 	}
 
-	public DictionaryEntry(String[] completeStr) {
-		/*
-		 * int delim_index = completeStr.indexOf(" "); int length =
-		 * completeStr.length();
-		 * 
-		 * if (delim_index <= 0) { delim_index = length; }
-		 */
+	public DictionaryEntry(String fullInfo) {
+		String[] completeStr = full.split(" ");
 		theSurname = completeStr[0];
 		theName = completeStr[1];
 		theMiddlename = completeStr[2];
@@ -44,10 +39,10 @@ public class DictionaryEntry extends DictionaryElem {
 		info[2] = completeStr[2];
 		info[3] = completeStr[3];
 		info[4] = completeStr[4];
-		/*
-		 * theName = completeStr.substring(0, completeStr.indexOf(" "));
-		 * theAddress = completeStr.substring(completeStr.indexOf(" ") + 1, );
-		 */
+	}
+
+	public DictionaryEntry(String[] completeStr) {
+		this(completeStr[0], completeStr[1], completeStr[2], completeStr[3], completeStr[4], completeStr[5]);
 	}
 
 	public String getType() {

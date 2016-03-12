@@ -8,6 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 
 import javax.swing.JButton;
@@ -111,10 +116,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.setLayout(new BoxLayout(form_panel, BoxLayout.PAGE_AXIS));
 
 		// Add an image
-		String img_destination = img_default; // TODO Need in
-												// refactoring (get
-												// path from
-												// person`s class)
+		String img_destination = img_default;
 
 		image_label.setIcon(new ImageIcon(img_destination));
 		image_label.addMouseListener(new MouseAdapter() {
@@ -252,33 +254,21 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
+			// TODO make separate buttons for saving and reading from file so
+			// that the client could download or save information at any time
+			// !!! (add fileChooser)
 			@Override
 			public void windowClosing(WindowEvent e) {
 				int reply = JOptionPane.showConfirmDialog(null, "Save changes before you exit?", "Exit",
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (reply == JOptionPane.YES_OPTION) { // if yes - save Tree and
 														// exit
-
-					// TODO make it in external method
-					Object o = theTree.getModel().getRoot(); // TODO rewrite!
-					DictionaryEntry elem;
-					DefaultMutableTreeNode node, nodeElem;
-					@SuppressWarnings("rawtypes")
-					Enumeration en;
-					for (int i = 0; i < theTree.getModel().getChildCount(o); i++) {
-						node = (DefaultMutableTreeNode) theTree.getModel().getChild(o, i);
-
-						en = node.children(); // get all instances of current
-												// node
-						while (en.hasMoreElements()) {
-							nodeElem = (DefaultMutableTreeNode) en.nextElement();
-
-							elem = (DictionaryEntry) nodeElem.getUserObject(); // get
-																				// instance
-							System.out.println(elem.getFullInfo()); 
-						}
+					String fileName = "C://Users/viktor/Documents/Workspace/employee-tree/try.txt";
+					try {
+						write(fileName);
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "File error!");
 					}
-
 					System.exit(0);
 				}
 				if (reply == JOptionPane.CANCEL_OPTION) { // if cancel - return
@@ -286,6 +276,16 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				}
 				if (reply == JOptionPane.NO_OPTION) {
 					System.exit(0); // if no - exit
+				}
+			}
+
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				String fileName = "C://Users/viktor/Documents/Workspace/employee-tree/try.txt";
+				try {
+					read(fileName);
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, "File error!");
 				}
 			}
 		});
@@ -371,20 +371,20 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		}
 		if (event.getSource().equals(findButton)) {
 			setNext(0);
-			nextSearch=null;
+			nextSearch = null;
 			TreePath path = theAppModel.findPerson(textVal, getNext());
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
 				theTree.removeSelectionPath(path);
 				theTree.setSelectionPath(path);
 				btnFindNext.setEnabled(true);
-				nextSearch=textVal;
-			}
-			else
-			{
+				nextSearch = textVal;
+			} else {
 				JOptionPane.showMessageDialog(null, "Nothing found!");
 				return;
 			}
+			if (theAppModel.findPerson(textVal, getNext() + 1) == null)
+				btnFindNext.setEnabled(false);
 			setNext(1);
 		}
 
@@ -458,6 +458,50 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 
 	}
 
+	private void write(String fileName) throws IOException {
+		File file = new File(fileName);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+
+		Object o = theTree.getModel().getRoot();
+		DictionaryEntry elem;
+		DefaultMutableTreeNode node, nodeElem;
+		@SuppressWarnings("rawtypes")
+		Enumeration en;
+		for (int i = 0; i < theTree.getModel().getChildCount(o); i++) {
+			node = (DefaultMutableTreeNode) theTree.getModel().getChild(o, i);
+
+			en = node.children(); // get all instances of current
+									// node
+			while (en.hasMoreElements()) {
+				nodeElem = (DefaultMutableTreeNode) en.nextElement();
+
+				elem = (DictionaryEntry) nodeElem.getUserObject(); // get
+																	// instance
+				out.println(elem.getFullInfo());
+			}
+
+		}
+		out.close();
+	}
+
+	private void read(String fileName) throws IOException {
+		String[] completeStr;
+		File file = new File(fileName);
+
+		BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
+
+		String s;
+		while ((s = in.readLine()) != null) {
+			completeStr = s.split(" ");
+			theAppModel.insertPerson(completeStr);
+		}
+		in.close();
+	}
+
 	public void valueChanged(TreeSelectionEvent event) {
 		TreePath path = theTree.getSelectionPath();
 		if (path == null) {
@@ -467,10 +511,5 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		display(selectedNode);
 		editButton.setEnabled(true);
 		deleteButton.setEnabled(true);
-		/*
-		 * if (selectedNode != null) {
-		 * theTextArea.setText(selectedNode.toString()); }
-		 */
-
 	}
 }

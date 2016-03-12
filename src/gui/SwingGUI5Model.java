@@ -26,17 +26,12 @@ public class SwingGUI5Model {
 	}
 
 	private TreePath search(DictionaryEntry new_entry, DictionaryAnchor anchor, int i) {
-		matches.clear(); // ������ ����� ��������� ����������
+		matches.clear();
 		findInfo(new_entry, anchor);
 		return selectMatch(i);
 	}
 
-	private TreePath selectMatch(
-			int index) { /*
-							 * ���� ������ ��������� ����� �� ���� � �����
-							 * ������������� ����������� ������ ������� ���� �
-							 * ����� ����
-							 */
+	private TreePath selectMatch(int index) {
 		if (!matches.isEmpty() && index < matches.size() && index >= 0)
 			return new TreePath((matches.get(index)).getPath());
 		else
@@ -152,7 +147,6 @@ public class SwingGUI5Model {
 
 	protected boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
-		// String[] info = new_entry.getInfo();
 		String firstLetter = new_entry.getValue().substring(0, 1);
 		boolean result = false;
 
