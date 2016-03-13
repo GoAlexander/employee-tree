@@ -17,4 +17,5 @@ If you need to build .jar, you have to write resourceLoader for images [guide](h
 All the rest works perfectly ;)
   
   
-![alt text](https://github.com/GoAlexander/employee-tree/tree/master/test/example.png "Screenshot")
+Screenshot:  
+![alt text](https://raw.githubusercontent.com/GoAlexander/employee-tree/master/test/example.png "Screenshot")
