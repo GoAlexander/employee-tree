@@ -1,0 +1,2 @@
+Dydychkin Alexander Alekseevich 16/12/1995 2 ./images/default.jpg
+Sergeev Alexander Viktorovich 16/01/1997 1 C:\Users\viktor\Documents\Workspace\employee-tree\test\DSCN2281.JPG
