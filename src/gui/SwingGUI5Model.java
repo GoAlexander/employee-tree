@@ -108,6 +108,35 @@ public class SwingGUI5Model {
 		return path;
 	}
 
+	protected void clean() {
+		DictionaryAnchor anchor = new DictionaryAnchor();
+		@SuppressWarnings("rawtypes")
+		Enumeration en1 = theRoot.children();
+		while (en1.hasMoreElements()) {
+			DefaultMutableTreeNode node1 = (DefaultMutableTreeNode) en1.nextElement();
+
+			DictionaryElem elem1 = (DictionaryElem) node1.getUserObject();
+			if ("Topic".equals(elem1.getType()))
+				anchor.topic = node1;
+
+			if (anchor.topic != null) {
+				@SuppressWarnings("rawtypes")
+				Enumeration en2 = anchor.topic.children();
+				anchor.entry = null;
+
+				while (en2.hasMoreElements()) {
+					DefaultMutableTreeNode node2 = (DefaultMutableTreeNode) en2.nextElement();
+
+					DictionaryEntry elem2 = (DictionaryEntry) node2.getUserObject();
+					if ("Entry".equals(elem2.getType())) {
+						removeNodeFromParent(node2);
+					}
+				}
+			}
+
+		}
+	}
+
 	protected void findInfo(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
 		if (anchor == null)

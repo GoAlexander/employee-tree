@@ -34,7 +34,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JDateChooser;
-
 import tree.DictionaryEntry;
 import filter.*;
 
@@ -76,7 +75,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private JLabel lblNewLabel_1;
 	private JTextField textField_2;
 	private JLabel lblNewLabel_2;
-	private JTextField textField_3;
 	private JLabel lblNewLabel_3;
 	private JTextField textField_4;
 	private JLabel image_label = new JLabel();
@@ -183,22 +181,15 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		// Note: Dob = birthday
 		lblNewLabel_2 = new JLabel("Birthday");
 		panel_1.add(lblNewLabel_2);
-		
-		//JDate Chooser:
+
+		// JDate Chooser:
 		/*
-		 * Big thanks for the calendar:
-		 * http://toedter.com/jcalendar/
+		 * Big thanks for the calendar: http://toedter.com/jcalendar/
 		 */
 		dateChooser = new JDateChooser();
-	    dateChooser.setBounds(20, 20, 200, 20);
-	    dateChooser.setDateFormatString("dd-MM-yyyy");
+		dateChooser.setBounds(20, 20, 200, 20);
+		dateChooser.setDateFormatString("dd-MM-yyyy");
 		panel_1.add(dateChooser);
-
-		/*
-		textField_3 = new JTextField();
-		panel_1.add(textField_3);
-		textField_3.setColumns(10);
-		 */
 
 		lblNewLabel_3 = new JLabel("Number");
 		panel_1.add(lblNewLabel_3);
@@ -240,31 +231,31 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				textField.setText("");
 				textField_1.setText("");
 				textField_2.setText("");
-				dateChooser.setCalendar(null); //TODO make ("") ?!
+				dateChooser.setCalendar(null);
 				textField_4.setText("");
 				image_label.setIcon(new ImageIcon(img_default)); // set default
 																	// image
 			}
 		});
-		
+
 		btnSaveTree = new JButton("Save Tree");
 		btnSaveTree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//TODO this code repeats 2 times. Maybe make a method?!
+
+				// TODO this code repeats 2 times. Maybe make a method?!
 				String fileName = null;
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("."));
 				chooser.setDialogTitle("Select destination");
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				chooser.setAcceptAllFileFilterUsed(false);
-				
+
 				if (chooser.showSaveDialog(btnSaveTree) == JFileChooser.APPROVE_OPTION) {
 					if (DEBUG)
 						System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
 					fileName = chooser.getSelectedFile().toString();
-				}		
-			
+				}
+
 				try {
 					write(fileName);
 				} catch (IOException e1) {
@@ -272,25 +263,25 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				}
 			}
 		});
-		
+
 		btnLoadTree = new JButton("Load Tree");
 		btnLoadTree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//TODO clean current Tree!
+
+				theAppModel.clean();
 				String fileName = null;
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("."));
 				chooser.setDialogTitle("Select destination");
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				chooser.setAcceptAllFileFilterUsed(false);
-				
-				if (chooser.showOpenDialog(btnSaveTree) == JFileChooser.APPROVE_OPTION) {
+
+				if (chooser.showOpenDialog(btnLoadTree) == JFileChooser.APPROVE_OPTION) {
 					if (DEBUG)
 						System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
 					fileName = chooser.getSelectedFile().toString();
 				}
-				
+
 				try {
 					read(fileName);
 				} catch (IOException e1) {
@@ -308,10 +299,10 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel2.add(btnFindNext);
 		panel2.add(editButton);
 		panel2.add(btnCleanFields);
-		//panel2.add(changeLookFeelButton);
-		
+		// panel2.add(changeLookFeelButton);
+
 		JPanel panel2Bottom = new JPanel();
-		
+
 		panel2Bottom.add(btnSaveTree);
 		panel2Bottom.add(btnLoadTree);
 		panel2Bottom.add(changeLookFeelButton);
@@ -321,7 +312,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		panel3.setLayout(new GridLayout(2, 1));
 		panel3.add(panel2);
 		panel3.add(panel2Bottom);
-		
+
 		contentPane.add(panel3, "South");
 
 		return null;
@@ -340,20 +331,20 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (reply == JOptionPane.YES_OPTION) { // if yes - save Tree and
 														// exit
-					
+
 					String fileName = null;
 					JFileChooser chooser = new JFileChooser();
 					chooser.setCurrentDirectory(new java.io.File("."));
 					chooser.setDialogTitle("Select destination");
 					chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 					chooser.setAcceptAllFileFilterUsed(false);
-					
+
 					if (chooser.showSaveDialog(btnSaveTree) == JFileChooser.APPROVE_OPTION) {
 						if (DEBUG)
 							System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
 						fileName = chooser.getSelectedFile().toString();
 					}
-					
+
 					try {
 						write(fileName);
 					} catch (IOException e1) {
@@ -387,11 +378,11 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textVal[0] = textField.getText();
 		textVal[1] = textField_1.getText();
 		textVal[2] = textField_2.getText();
-		//textVal[3] = textField_3.getText(); //TODO
-		
-		SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
-		textVal[3] = sdf.format(dateChooser.getDate());
-		
+		if (dateChooser.getDate() != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			textVal[3] = sdf.format(dateChooser.getDate());
+		} else
+			textVal[3] = "";
 		textVal[4] = textField_4.getText();
 		if (selectedfile != null)
 			textVal[5] = selectedfile;
@@ -405,9 +396,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		} else {
 			JOptionPane.showMessageDialog(null, "Invalid data in fields!");
 		}
-
-		if (textVal.equals(""))
-			textVal[0] = "new";
 
 		// Look&Feel button action
 		if (event.getSource().equals(changeLookFeelButton))
@@ -534,27 +522,16 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			textField.setText(elem.getValue());
 			textField_1.setText(elem.getName());
 			textField_2.setText(elem.getMiddlename());
-			//textField_3.setText(elem.getDob()); //TODO bug
-			
-			/*
-			java.util.Date date;
-			try {
-				date = new SimpleDateFormat("dd-MM-yyyy").parse(elem.getDob());
-				dateChooser.setDate(date);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
+
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 			try {
 				Date date = formatter.parse(elem.getDob());
 				dateChooser.setDate(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+				System.out.println("dgdddfdfdfesdfd");
 				e.printStackTrace();
 			}
-			
+
 			textField_4.setText(elem.getAddress());
 			image_label.setIcon(new ImageIcon(
 					new ImageIcon(elem.getPhoto()).getImage().getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
@@ -605,7 +582,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		}
 		in.close();
 	}
-	
+
 	public void valueChanged(TreeSelectionEvent event) {
 		TreePath path = theTree.getSelectionPath();
 		if (path == null) {
