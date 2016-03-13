@@ -38,7 +38,7 @@ public class SwingGUI5Model {
 			return null;
 	}
 
-	public TreePath findPerson(String[] dataarr, int i) {
+	protected TreePath findPerson(String[] dataarr, int i) {
 
 		// TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
@@ -51,7 +51,7 @@ public class SwingGUI5Model {
 		return this.search(new_entry, anchor, i);
 	}
 
-	public void deletePerson(DefaultMutableTreeNode selectedNode) {
+	protected void deletePerson(DefaultMutableTreeNode selectedNode) {
 
 		if (selectedNode != theRoot) {
 			DictionaryElem elem = (DictionaryElem) selectedNode.getUserObject();
@@ -61,7 +61,7 @@ public class SwingGUI5Model {
 		}
 	}
 
-	public TreePath editPerson(DefaultMutableTreeNode selectedNode, String[] arr) {
+	protected TreePath editPerson(DefaultMutableTreeNode selectedNode, String[] arr) {
 		TreePath path = null;
 		DictionaryAnchor anchor = new DictionaryAnchor();
 
@@ -78,7 +78,7 @@ public class SwingGUI5Model {
 		return path;
 	}
 
-	public TreePath insertPerson(String[] dataarr) {
+	protected TreePath insertPerson(String[] dataarr) {
 		TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
 
@@ -137,7 +137,7 @@ public class SwingGUI5Model {
 		}
 	}
 
-	protected void findInfo(DictionaryEntry new_entry, DictionaryAnchor anchor) {
+	private void findInfo(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
 		if (anchor == null)
 			return;
@@ -174,7 +174,7 @@ public class SwingGUI5Model {
 		}
 	}
 
-	protected boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
+	private boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
 
 		String firstLetter = new_entry.getValue().substring(0, 1);
 		boolean result = false;
@@ -221,16 +221,16 @@ public class SwingGUI5Model {
 		return result;
 	}
 
-	public void removeNodeFromParent(MutableTreeNode selectedNode) {
+	protected void removeNodeFromParent(MutableTreeNode selectedNode) {
 		theModel.removeNodeFromParent(selectedNode);
 	}
 
-	public TreeNode[] getPathToRoot(MutableTreeNode newNode) {
+	protected TreeNode[] getPathToRoot(MutableTreeNode newNode) {
 
 		return theModel.getPathToRoot(newNode);
 	}
 
-	public DefaultTreeModel buildDefaultTreeStructure() {
+	protected DefaultTreeModel buildDefaultTreeStructure() {
 		theRoot = new DefaultMutableTreeNode("Dictionary");
 		theRoot.setAllowsChildren(true);
 

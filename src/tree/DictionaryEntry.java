@@ -1,14 +1,14 @@
 package tree;
 
 public class DictionaryEntry extends DictionaryElem {
-	protected String theName;
-	protected String theSurname;
-	protected String theMiddlename;
-	protected String theDob;
-	protected String theAddress;
-	protected String thePhoto;
-	protected String full;
-	protected String[] info = new String[5];
+	private String theName;
+	private String theSurname;
+	private String theMiddlename;
+	private String theDob;
+	private String theAddress;
+	private String thePhoto;
+	private String full;
+	private String[] info = new String[5];
 
 	public DictionaryEntry(String surname, String name, String middlename, String dob, String address, String photo) {
 		theSurname = surname;

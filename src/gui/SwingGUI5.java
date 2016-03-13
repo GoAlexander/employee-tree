@@ -62,8 +62,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private String selectedfile;
 	private JButton changeLookFeelButton;
 
-	// private JTextField theTextField;
-
 	private UIManager.LookAndFeelInfo installedLF[];
 
 	private int current;
@@ -87,7 +85,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private String img_default = "./images/default.jpg";
 	private JButton btnFindNext;
 
-	protected Component buildGUI() {
+	private Component buildGUI() {
 
 		Container contentPane = this.getContentPane();
 		// contentPane.setLayout (new FlowLayout());
