@@ -121,9 +121,9 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		form_panel.setLayout(new BoxLayout(form_panel, BoxLayout.PAGE_AXIS));
 
 		// Add an image
-		String img_destination = img_default;
+		// String img_destination = img_default;
 
-		image_label.setIcon(new ImageIcon(img_destination));
+		image_label.setIcon(new ImageIcon(img_default));
 		image_label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -233,6 +233,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				textField_4.setText("");
 				image_label.setIcon(new ImageIcon(img_default)); // set default
 																	// image
+				selectedfile = img_default;
 			}
 		});
 
