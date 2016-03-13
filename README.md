@@ -11,3 +11,10 @@ To change the image click on it!
 #####Dependencies:
 Big thanks for the library [jcalendar](http://toedter.com/jcalendar/) (GNU LGPL).  
 The .jar file is in /lib folder.
+
+#######Notes:
+If you need to build .jar, you have to write resourceLoader for images [guide](https://www.youtube.com/watch?v=rCoed3MKpEA).  
+All the rest works perfectly ;)
+  
+  
+![alt text](https://github.com/GoAlexander/employee-tree/tree/master/test/example.png "Screenshot")
