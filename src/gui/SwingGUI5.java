@@ -1,11 +1,14 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -161,6 +164,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		lblSurname.setLabelFor(textField);
 		panel_1.add(textField);
 		textField.setColumns(10);
+		textField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == KeyEvent.VK_SPACE)
+					e.consume();
+			}
+		});
 
 		JLabel lblNewLabel = new JLabel("Name:");
 		panel_1.add(lblNewLabel);
@@ -168,6 +178,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_1 = new JTextField();
 		panel_1.add(textField_1);
 		textField_1.setColumns(10);
+		textField_1.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == KeyEvent.VK_SPACE)
+					e.consume();
+			}
+		});
 
 		lblNewLabel_1 = new JLabel("Middle Name");
 		panel_1.add(lblNewLabel_1);
@@ -175,6 +192,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_2 = new JTextField();
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
+		textField_2.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == KeyEvent.VK_SPACE)
+					e.consume();
+			}
+		});
 
 		// Note: Dob = birthday
 		lblNewLabel_2 = new JLabel("Birthday");
@@ -195,7 +219,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_4 = new JTextField();
 		panel_1.add(textField_4);
 		textField_4.setColumns(10);
-
+		textField_4.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == KeyEvent.VK_SPACE)
+					e.consume();
+			}
+		});
 		form_panel.add(panel_1); // add panel of textFields to Boxlayout
 
 		contentPane.add(panel, "Center");
@@ -242,6 +272,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			public void actionPerformed(ActionEvent e) {
 
 				// TODO this code repeats 2 times. Maybe make a method?!
+
 				String fileName = null;
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("."));
@@ -267,7 +298,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnLoadTree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				theAppModel.clean();
 				String fileName = null;
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("."));
@@ -279,8 +309,17 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 					if (DEBUG)
 						System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
 					fileName = chooser.getSelectedFile().toString();
+					textField.setText("");
+					textField_1.setText("");
+					textField_2.setText("");
+					dateChooser.setCalendar(null);
+					textField_4.setText("");
+					image_label.setIcon(new ImageIcon(img_default)); // set
+																		// default
+																		// image
+					selectedfile = img_default;
+					theAppModel.clean();
 				}
-
 				try {
 					read(fileName);
 				} catch (IOException e1) {
@@ -389,12 +428,27 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			textVal[5] = img_default;
 
 		// Checking fields:
-		if (Filter.letter_filter(textVal[0]) == true && Filter.letter_filter(textVal[1]) == true
-				&& Filter.letter_filter(textVal[2]) == true && Filter.numeric_filter(textVal[4]) == true) {
-			operations(event, selectedNode, textVal);
-		} else {
-			JOptionPane.showMessageDialog(null, "Invalid data in fields!");
+		boolean flag = true;
+		if (Filter.letter_filter(textVal[0]) != true) {
+			textField.setForeground(Color.RED);
+			flag = false;
 		}
+		if (Filter.letter_filter(textVal[1]) != true) {
+			textField_1.setForeground(Color.RED);
+			flag = false;
+		}
+		if (Filter.letter_filter(textVal[2]) != true) {
+			textField_2.setForeground(Color.RED);
+			flag = false;
+		}
+		if (Filter.numeric_filter(textVal[4]) != true) {
+			textField_4.setForeground(Color.RED);
+			flag = false;
+		}
+		if (flag == true)
+			operations(event, selectedNode, textVal);
+		else
+			JOptionPane.showMessageDialog(null, "Invalid data in fields!");
 
 		// Look&Feel button action
 		if (event.getSource().equals(changeLookFeelButton))
@@ -429,7 +483,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private void operations(ActionEvent event, DefaultMutableTreeNode selectedNode, String[] textVal) {
 		if (event.getSource().equals(insertButton)) {
 			if (textVal[0].equals("") || textVal[1].equals("") || textVal[3].equals("") || textVal[4].equals("")) {
-				JOptionPane.showMessageDialog(null, "Invalid data in fields!");
+				JOptionPane.showMessageDialog(null, "Not all fields filled!");
 				return;
 			}
 			TreePath path = theAppModel.insertPerson(textVal);
@@ -450,6 +504,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 				btnFindNext.setEnabled(true);
 				nextSearch = textVal;
 			} else {
+				btnFindNext.setEnabled(false);
 				JOptionPane.showMessageDialog(null, "Nothing found!");
 				return;
 			}
@@ -499,7 +554,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 					JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) { // if yes
 				if (textVal[0].equals("") || textVal[1].equals("") || textVal[3].equals("") || textVal[4].equals("")) {
-					JOptionPane.showMessageDialog(null, "Invalid data in fields!");
+					JOptionPane.showMessageDialog(null, "Not all fields filled!");
 					return;
 				}
 				TreePath path = theAppModel.editPerson(selectedNode, textVal);
@@ -534,6 +589,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			textField_4.setText(elem.getAddress());
 			image_label.setIcon(new ImageIcon(
 					new ImageIcon(elem.getPhoto()).getImage().getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
+			selectedfile = elem.getPhoto();
+
 		}
 
 	}
