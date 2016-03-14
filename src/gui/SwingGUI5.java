@@ -166,6 +166,8 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField.setColumns(10);
 		textField.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
+				textField.setForeground(Color.BLACK);
+
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
@@ -180,6 +182,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_1.setColumns(10);
 		textField_1.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
+				textField_1.setForeground(Color.BLACK);
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
@@ -194,6 +197,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_2.setColumns(10);
 		textField_2.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
+				textField_2.setForeground(Color.BLACK);
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
@@ -221,6 +225,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		textField_4.setColumns(10);
 		textField_4.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
+				textField_4.setForeground(Color.BLACK);
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
@@ -270,8 +275,6 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnSaveTree = new JButton("Save Tree");
 		btnSaveTree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				// TODO this code repeats 2 times. Maybe make a method?!
 
 				String fileName = null;
 				JFileChooser chooser = new JFileChooser();
@@ -359,7 +362,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	public SwingGUI5(SwingGUI5Model appModel) {
 		theAppModel = appModel;
 		setTitle("Tree  example with model");
-		setSize(650, 360);
+		setSize(650, 370);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
