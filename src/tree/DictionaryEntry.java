@@ -4,45 +4,39 @@ public class DictionaryEntry extends DictionaryElem {
 	private String theName;
 	private String theSurname;
 	private String theMiddlename;
-	private String theDob;
+	private String theBirthday;
 	private String theAddress;
 	private String thePhoto;
 	private String full;
 	private String[] info = new String[5];
 
-	public DictionaryEntry(String surname, String name, String middlename, String dob, String address, String photo) {
-		theSurname = surname;
-		theName = name;
-		theMiddlename = middlename;
-		theDob = dob;
-		theAddress = address;
-		thePhoto = photo;
-		full = theSurname + theName + theMiddlename + theDob + theAddress;
-		info[0] = surname;
-		info[1] = name;
-		info[2] = middlename;
-		info[3] = dob;
-		info[4] = address;
-	}
+	/*
+	 * public DictionaryEntry(String surname, String name, String middlename,
+	 * String dob, String address, String photo) { theSurname = surname; theName
+	 * = name; theMiddlename = middlename; theDob = dob; theAddress = address;
+	 * thePhoto = photo; full = theSurname + theName + theMiddlename + theDob +
+	 * theAddress; info[0] = surname; info[1] = name; info[2] = middlename;
+	 * info[3] = dob; info[4] = address; }
+	 */
 
 	public DictionaryEntry(String fullInfo) {
-		String[] completeStr = full.split(" ");
+		// String[] completeStr = full.split(" ");
+		this(fullInfo.split(" "));
+	}
+
+	public DictionaryEntry(String[] completeStr) {
 		theSurname = completeStr[0];
 		theName = completeStr[1];
 		theMiddlename = completeStr[2];
-		theDob = completeStr[3];
+		theBirthday = completeStr[3];
 		theAddress = completeStr[4];
 		thePhoto = completeStr[5];
-		full = theSurname + theName + theMiddlename + theDob + theAddress;
+		full = theSurname + theName + theMiddlename + theBirthday + theAddress;
 		info[0] = completeStr[0];
 		info[1] = completeStr[1];
 		info[2] = completeStr[2];
 		info[3] = completeStr[3];
 		info[4] = completeStr[4];
-	}
-
-	public DictionaryEntry(String[] completeStr) {
-		this(completeStr[0], completeStr[1], completeStr[2], completeStr[3], completeStr[4], completeStr[5]);
 	}
 
 	public String getType() {
@@ -61,8 +55,8 @@ public class DictionaryEntry extends DictionaryElem {
 		return theMiddlename;
 	}
 
-	public String getDob() {
-		return theDob;
+	public String getBirthday() {
+		return theBirthday;
 	}
 
 	public String getAddress() {
@@ -75,11 +69,11 @@ public class DictionaryEntry extends DictionaryElem {
 
 	@Override
 	public String toString() {
-		return theSurname + " " + theName + " " + theMiddlename + " " + theDob + " " + theAddress;
+		return theSurname + " " + theName + " " + theMiddlename + " " + theBirthday + " " + theAddress;
 	}
 
 	public String getFullInfo() {
-		return theSurname + " " + theName + " " + theMiddlename + " " + theDob + " " + theAddress + " " + thePhoto;
+		return theSurname + " " + theName + " " + theMiddlename + " " + theBirthday + " " + theAddress + " " + thePhoto;
 	}
 
 	public String getInfo() {
@@ -92,7 +86,7 @@ public class DictionaryEntry extends DictionaryElem {
 		data[0] = elem.getValue();
 		data[1] = elem.getName();
 		data[2] = elem.getMiddlename();
-		data[3] = elem.getDob();
+		data[3] = elem.getBirthday();
 		data[4] = elem.getAddress();
 
 		boolean result = false;

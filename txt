@@ -1,1 +1,3 @@
-IvanovGuy A A 15/03/2016 5555 ./images/default.jpg
+a a a 04/03/2016 1 ./images/default.jpg
+w a a 04/03/2016 1 ./images/default.jpg
+wz a a 04/03/2016 1 C:\Users\viktor\Documents\Workspace\employee-tree\test\image3.png

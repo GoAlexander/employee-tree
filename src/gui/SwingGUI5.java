@@ -11,15 +11,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -54,39 +49,34 @@ import java.awt.Font;
 @SuppressWarnings("serial")
 public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionListener {
 	private SwingGUI5Model theAppModel;
-
 	private JTree theTree;
-	private JButton insertButton;
-	private JButton deleteButton;
-	private JButton findButton;
-	private JButton editButton;
-	private int next = 0;
-	private String[] nextSearch;
+
+	private JButton insertButton, deleteButton, findButton, editButton, changeLookFeelButton;
+
+	private int nextSearchIndex = 0;
+	private String[] nextSearchPerson;
 	private String selectedfile;
-	private JButton changeLookFeelButton;
 
 	private UIManager.LookAndFeelInfo installedLF[];
+	private int currentLook;
 
-	private int current;
-	private JLabel lblEditorModeexample;
+	private JLabel lblEditorModeexample, lblSurname, lblName, lblMiddlename, lblBirthday, lblNumber;
 	private JPanel panel_1;
-	private JLabel lblSurname;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JLabel lblNewLabel_1;
-	private JTextField textField_2;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JTextField textField_4;
+	private JTextField textFieldSurname, textFieldName, textFieldMiddlename, textFieldNumber;
 	private JLabel image_label = new JLabel();
-	private JButton btnCleanFields;
-	private JButton btnSaveTree;
-	private JButton btnLoadTree;
+	private JButton btnCleanFields, btnSaveTree, btnLoadTree, btnFindNext;
 	private JDateChooser dateChooser;
-
+	private String fileName;
 	private boolean DEBUG = true; // for debug
 	private String img_default = "./images/default.jpg";
-	private JButton btnFindNext;
+
+	private void setNext(int i) {
+		nextSearchIndex = i;
+	}
+
+	private int getNext() {
+		return nextSearchIndex;
+	}
 
 	private Component buildGUI() {
 
@@ -160,13 +150,13 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		lblSurname = new JLabel("Surname:");
 		panel_1.add(lblSurname);
 
-		textField = new JTextField();
-		lblSurname.setLabelFor(textField);
-		panel_1.add(textField);
-		textField.setColumns(10);
-		textField.addKeyListener(new KeyAdapter() {
+		textFieldSurname = new JTextField();
+		lblSurname.setLabelFor(textFieldSurname);
+		panel_1.add(textFieldSurname);
+		textFieldSurname.setColumns(10);
+		textFieldSurname.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				textField.setForeground(Color.BLACK);
+				textFieldSurname.setForeground(Color.BLACK);
 
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
@@ -174,39 +164,38 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 			}
 		});
 
-		JLabel lblNewLabel = new JLabel("Name:");
-		panel_1.add(lblNewLabel);
+		lblName = new JLabel("Name:");
+		panel_1.add(lblName);
 
-		textField_1 = new JTextField();
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
-		textField_1.addKeyListener(new KeyAdapter() {
+		textFieldName = new JTextField();
+		panel_1.add(textFieldName);
+		textFieldName.setColumns(10);
+		textFieldName.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				textField_1.setForeground(Color.BLACK);
+				textFieldName.setForeground(Color.BLACK);
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
 			}
 		});
 
-		lblNewLabel_1 = new JLabel("Middle Name");
-		panel_1.add(lblNewLabel_1);
+		lblMiddlename = new JLabel("Middle Name");
+		panel_1.add(lblMiddlename);
 
-		textField_2 = new JTextField();
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
-		textField_2.addKeyListener(new KeyAdapter() {
+		textFieldMiddlename = new JTextField();
+		panel_1.add(textFieldMiddlename);
+		textFieldMiddlename.setColumns(10);
+		textFieldMiddlename.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				textField_2.setForeground(Color.BLACK);
+				textFieldMiddlename.setForeground(Color.BLACK);
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
 			}
 		});
 
-		// Note: Dob = birthday
-		lblNewLabel_2 = new JLabel("Birthday");
-		panel_1.add(lblNewLabel_2);
+		lblBirthday = new JLabel("Birthday");
+		panel_1.add(lblBirthday);
 
 		// JDate Chooser:
 		/*
@@ -217,15 +206,15 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		panel_1.add(dateChooser);
 
-		lblNewLabel_3 = new JLabel("Number");
-		panel_1.add(lblNewLabel_3);
+		lblNumber = new JLabel("Number");
+		panel_1.add(lblNumber);
 
-		textField_4 = new JTextField();
-		panel_1.add(textField_4);
-		textField_4.setColumns(10);
-		textField_4.addKeyListener(new KeyAdapter() {
+		textFieldNumber = new JTextField();
+		panel_1.add(textFieldNumber);
+		textFieldNumber.setColumns(10);
+		textFieldNumber.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
-				textField_4.setForeground(Color.BLACK);
+				textFieldNumber.setForeground(Color.BLACK);
 				char c = e.getKeyChar();
 				if (c == KeyEvent.VK_SPACE)
 					e.consume();
@@ -261,11 +250,11 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnCleanFields = new JButton("Clean form");
 		btnCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField.setText("");
-				textField_1.setText("");
-				textField_2.setText("");
+				textFieldSurname.setText("");
+				textFieldName.setText("");
+				textFieldMiddlename.setText("");
 				dateChooser.setCalendar(null);
-				textField_4.setText("");
+				textFieldNumber.setText("");
 				image_label.setIcon(new ImageIcon(img_default)); // set default
 																	// image
 				selectedfile = img_default;
@@ -275,22 +264,21 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnSaveTree = new JButton("Save Tree");
 		btnSaveTree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				String fileName = null;
-				JFileChooser chooser = new JFileChooser();
-				chooser.setCurrentDirectory(new java.io.File("."));
-				chooser.setDialogTitle("Select destination");
-				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				chooser.setAcceptAllFileFilterUsed(false);
-
-				if (chooser.showSaveDialog(btnSaveTree) == JFileChooser.APPROVE_OPTION) {
-					if (DEBUG)
-						System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-					fileName = chooser.getSelectedFile().toString();
-				}
-
 				try {
-					write(fileName);
+					fileName = null;
+					JFileChooser chooser = new JFileChooser();
+					chooser.setCurrentDirectory(new java.io.File("."));
+					chooser.setDialogTitle("Select destination");
+					chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+					chooser.setAcceptAllFileFilterUsed(false);
+
+					if (chooser.showSaveDialog(btnSaveTree) == JFileChooser.APPROVE_OPTION) {
+						if (DEBUG)
+							System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
+						fileName = chooser.getSelectedFile().toString();
+					}
+
+					theAppModel.write(fileName);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "File error!");
 				}
@@ -300,31 +288,28 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		btnLoadTree = new JButton("Load Tree");
 		btnLoadTree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				String fileName = null;
-				JFileChooser chooser = new JFileChooser();
-				chooser.setCurrentDirectory(new java.io.File("."));
-				chooser.setDialogTitle("Select destination");
-				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				chooser.setAcceptAllFileFilterUsed(false);
-
-				if (chooser.showOpenDialog(btnLoadTree) == JFileChooser.APPROVE_OPTION) {
-					if (DEBUG)
-						System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-					fileName = chooser.getSelectedFile().toString();
-					textField.setText("");
-					textField_1.setText("");
-					textField_2.setText("");
-					dateChooser.setCalendar(null);
-					textField_4.setText("");
-					image_label.setIcon(new ImageIcon(img_default)); // set
-																		// default
-																		// image
-					selectedfile = img_default;
-					theAppModel.clean();
-				}
 				try {
-					read(fileName);
+					fileName = null;
+					JFileChooser chooser = new JFileChooser();
+					chooser.setCurrentDirectory(new java.io.File("."));
+					chooser.setDialogTitle("Select destination");
+					chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+					chooser.setAcceptAllFileFilterUsed(false);
+
+					if (chooser.showOpenDialog(btnLoadTree) == JFileChooser.APPROVE_OPTION) {
+						if (DEBUG)
+							System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
+						fileName = chooser.getSelectedFile().toString();
+						// delete the selected person
+						TreePath path = theTree.getSelectionPath();
+						if (path != null) {
+							theAppModel.deletePerson((DefaultMutableTreeNode) path.getLastPathComponent());
+						}
+						theAppModel.clean();
+						btnCleanFields.doClick();
+					}
+					theAppModel.read(fileName);
+					btnFindNext.setEnabled(false);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "File error!");
 				}
@@ -372,25 +357,7 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (reply == JOptionPane.YES_OPTION) { // if yes - save Tree and
 														// exit
-
-					String fileName = null;
-					JFileChooser chooser = new JFileChooser();
-					chooser.setCurrentDirectory(new java.io.File("."));
-					chooser.setDialogTitle("Select destination");
-					chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-					chooser.setAcceptAllFileFilterUsed(false);
-
-					if (chooser.showSaveDialog(btnSaveTree) == JFileChooser.APPROVE_OPTION) {
-						if (DEBUG)
-							System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-						fileName = chooser.getSelectedFile().toString();
-					}
-
-					try {
-						write(fileName);
-					} catch (IOException e1) {
-						JOptionPane.showMessageDialog(null, "File error!");
-					}
+					btnSaveTree.doClick();
 					System.exit(0);
 				}
 				if (reply == JOptionPane.CANCEL_OPTION) { // if cancel - return
@@ -405,9 +372,9 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		this.buildGUI();
 
 		installedLF = UIManager.getInstalledLookAndFeels();
-		current = 0;
+		currentLook = 0;
 		try {
-			UIManager.setLookAndFeel(installedLF[current].getClassName());
+			UIManager.setLookAndFeel(installedLF[currentLook].getClassName());
 		} catch (Exception ex) {
 			System.out.println("Exception 1");
 		}
@@ -416,15 +383,15 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	public void actionPerformed(ActionEvent event) {
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theTree.getLastSelectedPathComponent();
 		String[] textVal = new String[6];
-		textVal[0] = textField.getText();
-		textVal[1] = textField_1.getText();
-		textVal[2] = textField_2.getText();
+		textVal[0] = textFieldSurname.getText();
+		textVal[1] = textFieldName.getText();
+		textVal[2] = textFieldMiddlename.getText();
 		if (dateChooser.getDate() != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			textVal[3] = sdf.format(dateChooser.getDate());
 		} else
 			textVal[3] = "";
-		textVal[4] = textField_4.getText();
+		textVal[4] = textFieldNumber.getText();
 		if (selectedfile != null)
 			textVal[5] = selectedfile;
 		else
@@ -433,19 +400,19 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		// Checking fields:
 		boolean flag = true;
 		if (Filter.letter_filter(textVal[0]) != true) {
-			textField.setForeground(Color.RED);
+			textFieldSurname.setForeground(Color.RED);
 			flag = false;
 		}
 		if (Filter.letter_filter(textVal[1]) != true) {
-			textField_1.setForeground(Color.RED);
+			textFieldName.setForeground(Color.RED);
 			flag = false;
 		}
 		if (Filter.letter_filter(textVal[2]) != true) {
-			textField_2.setForeground(Color.RED);
+			textFieldMiddlename.setForeground(Color.RED);
 			flag = false;
 		}
 		if (Filter.numeric_filter(textVal[4]) != true) {
-			textField_4.setForeground(Color.RED);
+			textFieldNumber.setForeground(Color.RED);
 			flag = false;
 		}
 		if (flag == true)
@@ -457,29 +424,21 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		if (event.getSource().equals(changeLookFeelButton))
 
 		{
-			current++;
-			if (current > installedLF.length - 1) {
-				current = 0;
+			currentLook++;
+			if (currentLook > installedLF.length - 1) {
+				currentLook = 0;
 			}
 
-			System.out.println("New Current Look&Feel:" + current);
-			System.out.println("New Current Look&Feel Class:" + installedLF[current].getClassName());
+			System.out.println("New Current Look&Feel:" + currentLook);
+			System.out.println("New Current Look&Feel Class:" + installedLF[currentLook].getClassName());
 
 			try {
-				UIManager.setLookAndFeel(installedLF[current].getClassName());
+				UIManager.setLookAndFeel(installedLF[currentLook].getClassName());
 				SwingUtilities.updateComponentTreeUI(this);
 			} catch (Exception ex) {
 				System.out.println("exception");
 			}
 		}
-	}
-
-	private void setNext(int i) {
-		next = i;
-	}
-
-	private int getNext() {
-		return next;
 	}
 
 	// here are all actions for buttons
@@ -498,14 +457,14 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		}
 		if (event.getSource().equals(findButton)) {
 			setNext(0);
-			nextSearch = null;
+			nextSearchPerson = null;
 			TreePath path = theAppModel.findPerson(textVal, getNext());
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
 				theTree.removeSelectionPath(path);
 				theTree.setSelectionPath(path);
 				btnFindNext.setEnabled(true);
-				nextSearch = textVal;
+				nextSearchPerson = textVal;
 			} else {
 				btnFindNext.setEnabled(false);
 				JOptionPane.showMessageDialog(null, "Nothing found!");
@@ -517,14 +476,14 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 		}
 
 		if (event.getSource().equals(btnFindNext)) {
-			TreePath path = theAppModel.findPerson(nextSearch, getNext());
+			TreePath path = theAppModel.findPerson(nextSearchPerson, getNext());
 			if (path != null) {
 				theTree.scrollPathToVisible(path);
 				theTree.setSelectionPath(path);
 				setNext(getNext() + 1);
 			} else
 				setNext(0);
-			path = theAppModel.findPerson(nextSearch, getNext());
+			path = theAppModel.findPerson(nextSearchPerson, getNext());
 			if (path == null) {
 				setNext(0);
 			}
@@ -576,70 +535,25 @@ public class SwingGUI5 extends JFrame implements ActionListener, TreeSelectionLi
 	private void display(DefaultMutableTreeNode selectedNode) {
 		if (selectedNode != null) {
 			DictionaryEntry elem = (DictionaryEntry) selectedNode.getUserObject();
-			textField.setText(elem.getValue());
-			textField_1.setText(elem.getName());
-			textField_2.setText(elem.getMiddlename());
+			textFieldSurname.setText(elem.getValue());
+			textFieldName.setText(elem.getName());
+			textFieldMiddlename.setText(elem.getMiddlename());
 
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 			try {
-				Date date = formatter.parse(elem.getDob());
+				Date date = formatter.parse(elem.getBirthday());
 				dateChooser.setDate(date);
 			} catch (ParseException e) {
-				System.out.println("dgdddfdfdfesdfd");
 				e.printStackTrace();
 			}
 
-			textField_4.setText(elem.getAddress());
+			textFieldNumber.setText(elem.getAddress());
 			image_label.setIcon(new ImageIcon(
 					new ImageIcon(elem.getPhoto()).getImage().getScaledInstance(128, 128, Image.SCALE_AREA_AVERAGING)));
 			selectedfile = elem.getPhoto();
 
 		}
 
-	}
-
-	private void write(String fileName) throws IOException {
-		File file = new File(fileName);
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-
-		PrintWriter out = new PrintWriter(file.getAbsoluteFile());
-
-		Object o = theTree.getModel().getRoot();
-		DictionaryEntry elem;
-		DefaultMutableTreeNode node, nodeElem;
-		@SuppressWarnings("rawtypes")
-		Enumeration en;
-		for (int i = 0; i < theTree.getModel().getChildCount(o); i++) {
-			node = (DefaultMutableTreeNode) theTree.getModel().getChild(o, i);
-
-			en = node.children(); // get all instances of current
-									// node
-			while (en.hasMoreElements()) {
-				nodeElem = (DefaultMutableTreeNode) en.nextElement();
-
-				elem = (DictionaryEntry) nodeElem.getUserObject(); // get
-																	// instance
-				out.println(elem.getFullInfo());
-			}
-
-		}
-		out.close();
-	}
-
-	private void read(String fileName) throws IOException {
-		String[] completeStr;
-		File file = new File(fileName);
-
-		BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
-
-		String s;
-		while ((s = in.readLine()) != null) {
-			completeStr = s.split(" ");
-			theAppModel.insertPerson(completeStr);
-		}
-		in.close();
 	}
 
 	public void valueChanged(TreeSelectionEvent event) {
