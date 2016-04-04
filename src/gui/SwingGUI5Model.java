@@ -82,16 +82,16 @@ public class SwingGUI5Model {
 		return path;
 	}
 
-	protected TreePath insertPerson(String[] dataarr) {
+	protected TreePath insertPerson(String[] data) {
 		TreePath path;
 		DictionaryAnchor anchor = new DictionaryAnchor();
 
 		anchor.topic = null;
 		anchor.entry = null;
 
-		DictionaryEntry new_entry = new DictionaryEntry(dataarr);
+		DictionaryEntry new_entry = new DictionaryEntry(data);
 
-		if (this.findInfo(new_entry, anchor)) {
+		if (this.findEntry(new_entry, anchor)) {
 			// found such a person
 			TreeNode[] nodes = theModel.getPathToRoot(anchor.entry);
 			path = new TreePath(nodes);
@@ -152,38 +152,52 @@ public class SwingGUI5Model {
 		return result;
 	}
 
-	/*
-	 * private boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor
-	 * anchor) {
-	 * 
-	 * String firstLetter = new_entry.getValue().substring(0, 1); boolean result
-	 * = false;
-	 * 
-	 * if (anchor == null) return false; anchor.topic = null;
-	 * 
-	 * @SuppressWarnings("rawtypes") Enumeration en = theRoot.children();
-	 * 
-	 * while (en.hasMoreElements()) { DefaultMutableTreeNode node =
-	 * (DefaultMutableTreeNode) en.nextElement();
-	 * 
-	 * DictionaryElem elem = (DictionaryElem) node.getUserObject(); if
-	 * ("Topic".equals(elem.getType())) { if
-	 * (firstLetter.equalsIgnoreCase(elem.getValue())) { anchor.topic = node;
-	 * break; } } else { break; } }
-	 * 
-	 * if (anchor.topic != null) { en = anchor.topic.children(); anchor.entry =
-	 * null;
-	 * 
-	 * while (en.hasMoreElements()) { DefaultMutableTreeNode node =
-	 * (DefaultMutableTreeNode) en.nextElement();
-	 * 
-	 * DictionaryEntry elem = (DictionaryEntry) node.getUserObject(); if
-	 * ("Entry".equals(elem.getType())) { if
-	 * (new_entry.getInfo().equalsIgnoreCase(elem.getInfo())) { anchor.entry =
-	 * node; result = true; break; } } }
-	 * 
-	 * } return result; }
-	 */
+	private boolean findEntry(DictionaryEntry new_entry, DictionaryAnchor anchor) {
+
+		String firstLetter = new_entry.getValue().substring(0, 1);
+		boolean result = false;
+
+		if (anchor == null)
+			return false;
+		anchor.topic = null;
+
+		@SuppressWarnings("rawtypes")
+		Enumeration en = theRoot.children();
+
+		while (en.hasMoreElements()) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) en.nextElement();
+
+			DictionaryElem elem = (DictionaryElem) node.getUserObject();
+			if ("Topic".equals(elem.getType())) {
+				if (firstLetter.equalsIgnoreCase(elem.getValue())) {
+					anchor.topic = node;
+					break;
+				}
+			} else {
+				break;
+			}
+		}
+
+		if (anchor.topic != null) {
+			en = anchor.topic.children();
+			anchor.entry = null;
+
+			while (en.hasMoreElements()) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) en.nextElement();
+
+				DictionaryEntry elem = (DictionaryEntry) node.getUserObject();
+				if ("Entry".equals(elem.getType())) {
+					if (new_entry.getInfo().equalsIgnoreCase(elem.getInfo())) {
+						anchor.entry = node;
+						result = true;
+						break;
+					}
+				}
+			}
+
+		}
+		return result;
+	}
 
 	protected void clean() {
 
